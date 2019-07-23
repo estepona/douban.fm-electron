@@ -1,0 +1,8 @@
+# Dependency
+node_modules
+
+# Out
+out
+
+# env
+.env
