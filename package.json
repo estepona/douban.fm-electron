@@ -1,0 +1,29 @@
+{
+  "name": "douban.fm-electron",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./dist/app.js",
+  "dependencies": {
+    "electron": "^5.0.7",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "npx tsc",
+    "watch": "npx tsc -w",
+    "lint": "npx tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build && npx electron ./dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/estepona/douban.fm-electron.git"
+  },
+  "author": "Binghuan Zhang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/estepona/douban.fm-electron/issues"
+  },
+  "homepage": "https://github.com/estepona/douban.fm-electron#readme"
+}

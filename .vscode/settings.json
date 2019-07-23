@@ -1,3 +1,6 @@
 {
-    "files.autoSave": "afterDelay"
+  "files.autoSave": "afterDelay",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true
+  }
 }
