@@ -1,24 +1,33 @@
 import { app, BrowserWindow } from "electron";
 import * as path from "path";
 
-let mainWindow: Electron.BrowserWindow | undefined;
+import apiClient from "./ApiClient";
 
-const createWindow = () => {
+let mainWindow: Electron.BrowserWindow | null;
+
+const createWindow = async () => {
+  await apiClient.login("sorrow1234", "1234qwer");
+
+  const redheartSongs = await apiClient.getRedheartSongs();
+
+  console.log(redheartSongs);
+
   mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
+    // frame: false,
   });
 
   mainWindow.loadFile(path.join(__dirname, "../asset/index.html"));
 
-  mainWindow.webContents.openDevTools();
-
   mainWindow.on("closed", () => {
-    mainWindow = undefined;
+    mainWindow = null;
   });
 };
 
-app.on("ready", createWindow);
+app.on("ready", async () => {
+  await createWindow();
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -26,8 +35,8 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("activate", () => {
+app.on("activate", async () => {
   if (!mainWindow) {
-    createWindow();
+    await createWindow();
   }
 });

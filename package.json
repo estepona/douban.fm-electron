@@ -4,6 +4,8 @@
   "description": "",
   "main": "./dist/app.js",
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.19.0",
     "electron": "^5.0.7",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3"
