@@ -1,11 +1,27 @@
-import { app, BrowserWindow, Menu } from "electron";
+import * as dotenv from "dotenv";
+import { app, BrowserWindow, Event, ipcMain, ipcRenderer, Menu, WebContents } from "electron";
 import * as path from "path";
 
-import apiClient from "./ApiClient";
+import apiClient from "./apiClient";
+import { readAuth, writeAuth } from "./auth";
+
+dotenv.config();
+
+let authInfo = readAuth();
 
 let mainWindow: Electron.BrowserWindow | null;
+let loginWindow: BrowserWindow | null;
 
 const createWindow = async () => {
+  if (authInfo) {
+    apiClient.setAccessToken(authInfo.access_token);
+
+    const redheartSongs = await apiClient.getRedheartSongs();
+    if (!redheartSongs) {
+      authInfo = null;
+    }
+  }
+
   // await apiClient.login("sorrow1234", "1234qwer");
   // const redheartSongs = await apiClient.getRedheartSongs();
   // console.log(redheartSongs);
@@ -14,6 +30,9 @@ const createWindow = async () => {
     height: 600,
     width: 800,
     // frame: false,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
 
   mainWindow.loadFile(path.join(__dirname, "../asset/index.html"));
@@ -23,17 +42,20 @@ const createWindow = async () => {
   });
 };
 
-const menuTemplate = [
+const menuTemplate: Array<Electron.MenuItemConstructorOptions | Electron.MenuItem | {}> = [
   {
-    label: "App",
+    label: "菜单",
     submenu: [
       {
-        label: "Log In",
-        click() {
-          let loginWindow: BrowserWindow | null = new BrowserWindow({
+        label: "登录",
+        click: () => {
+          loginWindow = new BrowserWindow({
             width: 300,
             height: 200,
             title: "Log In",
+            webPreferences: {
+              nodeIntegration: true,
+            },
           });
 
           loginWindow.loadFile(path.join(__dirname, "../asset/login.html"));
@@ -45,18 +67,56 @@ const menuTemplate = [
         // create log in window
       },
       {
-        label: "Log Out",
+        label: "登出",
       },
       {
-        label: "Quit",
+        label: "退出",
         accelerator: process.platform === "darwin" ? "Command+Q" : "Alt+F4",
-        click() {
+        click: () => {
           app.quit();
         },
       },
     ],
   },
 ];
+
+if (process.platform === "darwin") {
+  menuTemplate.unshift({});
+}
+
+if (process.env.NODE_ENV === "dev") {
+  menuTemplate.push({
+    label: "dev",
+    submenu: [
+      {
+        label: "togger dev tools",
+        click: (item, focusedWindow) => {
+          focusedWindow.webContents.toggleDevTools();
+        },
+      },
+    ],
+  });
+}
+
+ipcMain.on("login", async (event: Event, vals: string[]) => {
+  const authInfo = await apiClient.login(vals[0], vals[1]);
+  writeAuth(authInfo);
+
+  const redheartSongs = await apiClient.getRedheartSongs();
+  console.log(redheartSongs);
+
+  if (loginWindow) {
+    loginWindow.close();
+  }
+});
+
+ipcMain.on("player:getNextSong", async (event: Event, val: ISong | null) => {
+  const song = await apiClient.getDoubanSelectedSong(!val, !val ? undefined : val.sid);
+
+  console.log(111, !val ? "no sid" : val.sid, song.sid);
+
+  event.sender.send("player:receiveNextSong", song);
+});
 
 app.on("ready", async () => {
   await createWindow();

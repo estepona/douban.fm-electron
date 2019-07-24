@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>
 
-  </body>
+<head>
+  <meta charset="UTF-8">
+</head>
 
-  <script>
-    // You can also require other files to run in this process
-    require('./dist/renderer.js')
-  </script>
+<body>
+  <form>
+    <div>
+      <label>用户名:</label>
+      <input type="text" id="username" autofocus>
+    </div>
+    <div>
+      <label>密码:</label>
+      <input type="text" id="password" autofocus>
+    </div>
+    <button type="submit">登录</button>
+  </form>
+</body>
+
+<script>
+  const electron = require("electron");
+  const { ipcRenderer } = electron;
+
+  const form = document.querySelector("form");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.querySelector("#username").value;
+    const password = document.querySelector("#password").value;
+
+    ipcRenderer.send("login", [username, password]);
+  });
+</script>
+
 </html>

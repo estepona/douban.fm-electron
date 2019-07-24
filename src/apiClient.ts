@@ -8,6 +8,12 @@ class ApiClient {
     "Content-Type": "application/x-www-form-urlencoded",
   };
 
+  public setAccessToken(accessToken: string) {
+    Object.assign(this.headers, {
+      Authorization: `Bearer ${accessToken}`,
+    });
+  }
+
   public async login(username: string, password: string): Promise<IAuthInfo> {
     const authReq: IAuthQuery = {
       client_id: this.clientId,
@@ -54,11 +60,38 @@ class ApiClient {
     return channels;
   }
 
+  public async getDoubanSelectedSong(isNew: boolean, nextSid?: SongId): Promise<ISong> {
+    const params = {
+      channel: -10,
+      app_name: "radio_website",
+      client: "s:mainsite|y:3.0",
+      version: 100,
+      type: isNew ? "n" : "s",
+      sid: nextSid || undefined,
+    };
+
+    const paramsString = Object.entries(params)
+      .map((v) => v.join("="))
+      .join("&");
+
+    const playlist: IPlaylist = await Axios.post(`https://fm.douban.com/j/v2/playlist?${paramsString}`, null, {
+      headers: this.headers,
+    })
+      .then((res) => res.data);
+
+    return playlist.song[0];
+  }
+
   public async getRedheartSongs() {
     const redheart = await Axios.post("https://api.douban.com/v2/fm/redheart/basic", null, {
       headers: this.headers,
     })
-      .then((res) => res.data);
+      .then((res) => {
+        if (res.status !== 200) {
+          return null;
+        }
+        return res.data;
+      });
 
     // TODO: if not logged in, show warning message; from 'update_time'
     return redheart;
@@ -81,11 +114,6 @@ class ApiClient {
     return;
   }
 
-  private setAccessToken(accessToken: string) {
-    Object.assign(this.headers, {
-      Authorization: `Bearer ${accessToken}`,
-    });
-  }
 }
 
 export default new ApiClient();

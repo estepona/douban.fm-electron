@@ -1,19 +1,51 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Log In</title>
-  </head>
-  <body>
-    <form>
-      <div>
-        <label>用户名:</label>
-      </div>
-    </form>
-  </body>
 
-  <script>
-    // You can also require other files to run in this process
-    require('./dist/renderer.js')
-  </script>
+<head>
+  <meta charset="UTF-8">
+  <title>douban.fm</title>
+</head>
+
+<body>
+  <h1>Hello World!</h1>
+  <!-- All of the Node.js APIs are available in this renderer process. -->
+  We are using Node.js
+  <script>document.write(process.versions.node)</script>,
+  Chromium
+  <script>document.write(process.versions.chrome)</script>,
+  and Electron
+  <script>document.write(process.versions.electron)</script>
+
+  <!-- Simple video example -->
+  <!-- 'Big Buck Bunny' licensed under CC 3.0 by the Blender foundation. Hosted by archive.org -->
+  <!-- Poster from peach.blender.org -->
+  <video controls id="video" src="" height="50" width="300"></video>
+
+  <button id="nextSongButton" type="submit">下一首</button>
+</body>
+
+<script>
+  const electron = require("electron");
+  const path = require("path");
+  const { ipcRenderer } = electron;
+
+  const nextSongButton = document.querySelector("#nextSongButton");
+  const video = document.querySelector("#video");
+
+  // default video
+  video.src = path.join(__dirname, "silence.mp4");
+
+  let currentSong = null;
+
+  nextSongButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    ipcRenderer.send("player:getNextSong", currentSong);
+  });
+
+  ipcRenderer.on("player:receiveNextSong", (event, val) => {
+    video.src = val.url;
+    currentSong = val;
+  });
+</script>
+
 </html>
