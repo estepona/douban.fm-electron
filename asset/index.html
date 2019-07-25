@@ -20,25 +20,29 @@
 </style>
 
 <body>
-  <div height="30">
-    <span id="songName"
-      style="font-size:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(3,3,3)">s</span>
-  </div>
-  <div height="20">
-    <span id="songArtist"
-      style="font-size:15px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(74,74,74)">s</span>
+  <div height="30px">
+    <div height="30px">
+      <span id="songName"
+        style="font-size:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(3,3,3)">
+      </span>
+    </div>
+    <div height="20px">
+      <span id="songArtist"
+        style="font-size:15px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(74,74,74)">
+      </span>
+    </div>
   </div>
 
   <div id="progressBarParent">
     <div id="progressBar"></div>
   </div>
 
-  <video id="video" height="0px" src=""></video>
+  <video autoplay id="video" height="0px" src=""></video>
 
   <div id="buttons" style="position:absolute;width:300px">
-    <img id="playButton" src="icon/play-button-white.svg" height="30" width="30" />
-    <img id="nextButton" src="icon/next-button-white.svg" height="30" width="30" />
-    <img id="likeButton" src="icon/like-button-white.svg" height="30" width="30" />
+    <img id="pausePlayButton" src="icon/pause-button-thin.svg" height="30px" width="30px" />
+    <img id="nextButton" src="icon/next-button-white.svg" height="30px" width="30px" />
+    <img id="likeButton" src="icon/like-button-white.svg" height="30px" width="30px" />
   </div>
 
 </body>
@@ -51,9 +55,11 @@
   const video = document.querySelector("#video");
   const songName = document.querySelector("#songName");
   const songArtist = document.querySelector("#songArtist");
-  const playButton = document.querySelector("#playButton");
+  const pausePlayButton = document.querySelector("#pausePlayButton");
   const nextButton = document.querySelector("#nextButton");
   const likeButton = document.querySelector("#likeButton");
+
+  let paused = false;
 
   // default video
   video.src = path.join(__dirname, "silence.mp4");
@@ -61,15 +67,35 @@
   let currentSong = null;
 
   /**
-   * playButton event listeners
+   * pausePlayButton event listeners
   */
-  playButton.addEventListener("mouseover", (e) => {
-    playButton.src = "icon/play-button-black.svg";
+  pausePlayButton.addEventListener("mouseover", (e) => {
+    if (paused) {
+      pausePlayButton.src = "icon/play-button-black.svg";
+    } else {
+      pausePlayButton.src = "icon/pause-button-thick.svg";
+    }
   });
 
-  playButton.addEventListener("mouseout", (e) => {
-    playButton.src = "icon/play-button-white.svg";
+  pausePlayButton.addEventListener("mouseout", (e) => {
+    if (paused) {
+      pausePlayButton.src = "icon/play-button-white.svg";
+    } else {
+      pausePlayButton.src = "icon/pause-button-thin.svg";
+    }
   });
+
+  pausePlayButton.addEventListener("click", (e) => {
+    if (paused) {
+      video.play();
+      paused = false;
+      pausePlayButton.src = "icon/pause-button-thin.svg";
+    } else {
+      video.pause();
+      paused = true;
+      pausePlayButton.src = "icon/play-button-white.svg";
+    }
+  })
 
   /**
    * nextButton event listeners
@@ -85,6 +111,9 @@
   nextButton.addEventListener("click", (e) => {
     e.preventDefault();
     ipcRenderer.send("player:getNextSong", currentSong);
+
+    paused = false;
+    pausePlayButton.src = "icon/pause-button-thin.svg";
   });
 
   /**

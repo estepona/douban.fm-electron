@@ -30,6 +30,8 @@
     const username = document.querySelector("#username").value;
     const password = document.querySelector("#password").value;
 
+    console.log(username, password);
+
     ipcRenderer.send("login", [username, password]);
   });
 </script>

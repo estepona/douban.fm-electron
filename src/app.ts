@@ -23,8 +23,8 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
-    height: 200,
-    width: 480,
+    height: 250,
+    width: 500,
     // frame: false,
     webPreferences: {
       nodeIntegration: true,
@@ -107,9 +107,11 @@ ipcMain.on("login", async (event: Event, vals: string[]) => {
 });
 
 ipcMain.on("player:getNextSong", async (event: Event, val: ISong | null) => {
-  const song = await apiClient.getDoubanSelectedSong(!val, !val ? undefined : val.sid);
+  const song = val && val.sid
+    ? await apiClient.getDoubanSelectedSong(false, val.sid)
+    : await apiClient.getDoubanSelectedSong(true);
 
-  console.log(111, !val ? "no sid" : val.sid, song.sid);
+  console.log(val && val.sid);
 
   event.sender.send("player:receiveNextSong", song);
 });
@@ -120,8 +122,12 @@ app.on("ready", async () => {
   const menu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(menu);
 
-  const song = await apiClient.getDoubanSelectedSong(true);
-  console.log('new song');
+  let song: ISong | null = null;
+  while (!song) {
+    song = await apiClient.getDoubanSelectedSong(true);
+  }
+
+  console.log("new song");
   mainWindow!.webContents.send("player:receiveNextSong", song);
 });
 
