@@ -22,13 +22,9 @@ const createWindow = async () => {
     }
   }
 
-  // await apiClient.login("sorrow1234", "1234qwer");
-  // const redheartSongs = await apiClient.getRedheartSongs();
-  // console.log(redheartSongs);
-
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 200,
+    width: 480,
     // frame: false,
     webPreferences: {
       nodeIntegration: true,
@@ -50,9 +46,9 @@ const menuTemplate: Array<Electron.MenuItemConstructorOptions | Electron.MenuIte
         label: "登录",
         click: () => {
           loginWindow = new BrowserWindow({
-            width: 300,
-            height: 200,
             title: "Log In",
+            width: 300,
+            height: 150,
             webPreferences: {
               nodeIntegration: true,
             },
@@ -123,6 +119,10 @@ app.on("ready", async () => {
 
   const menu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(menu);
+
+  const song = await apiClient.getDoubanSelectedSong(true);
+  console.log('new song');
+  mainWindow!.webContents.send("player:receiveNextSong", song);
 });
 
 app.on("window-all-closed", () => {

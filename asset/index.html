@@ -6,22 +6,41 @@
   <title>douban.fm</title>
 </head>
 
+<style>
+  #progressBarParent {
+    width: 430px;
+    background-color: #ddd;
+  }
+
+  #progressBar {
+    width: 1%;
+    height: 10px;
+    background-color: #4CAF50;
+  }
+</style>
+
 <body>
-  <h1>Hello World!</h1>
-  <!-- All of the Node.js APIs are available in this renderer process. -->
-  We are using Node.js
-  <script>document.write(process.versions.node)</script>,
-  Chromium
-  <script>document.write(process.versions.chrome)</script>,
-  and Electron
-  <script>document.write(process.versions.electron)</script>
+  <div height="30">
+    <span id="songName"
+      style="font-size:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(3,3,3)">s</span>
+  </div>
+  <div height="20">
+    <span id="songArtist"
+      style="font-size:15px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(74,74,74)">s</span>
+  </div>
 
-  <!-- Simple video example -->
-  <!-- 'Big Buck Bunny' licensed under CC 3.0 by the Blender foundation. Hosted by archive.org -->
-  <!-- Poster from peach.blender.org -->
-  <video controls id="video" src="" height="50" width="300"></video>
+  <div id="progressBarParent">
+    <div id="progressBar"></div>
+  </div>
 
-  <button id="nextSongButton" type="submit">下一首</button>
+  <video id="video" height="0px" src=""></video>
+
+  <div id="buttons" style="position:absolute;width:300px">
+    <img id="playButton" src="icon/play-button-white.svg" height="30" width="30" />
+    <img id="nextButton" src="icon/next-button-white.svg" height="30" width="30" />
+    <img id="likeButton" src="icon/like-button-white.svg" height="30" width="30" />
+  </div>
+
 </body>
 
 <script>
@@ -29,23 +48,84 @@
   const path = require("path");
   const { ipcRenderer } = electron;
 
-  const nextSongButton = document.querySelector("#nextSongButton");
   const video = document.querySelector("#video");
+  const songName = document.querySelector("#songName");
+  const songArtist = document.querySelector("#songArtist");
+  const playButton = document.querySelector("#playButton");
+  const nextButton = document.querySelector("#nextButton");
+  const likeButton = document.querySelector("#likeButton");
 
   // default video
   video.src = path.join(__dirname, "silence.mp4");
 
   let currentSong = null;
 
-  nextSongButton.addEventListener("click", (e) => {
+  /**
+   * playButton event listeners
+  */
+  playButton.addEventListener("mouseover", (e) => {
+    playButton.src = "icon/play-button-black.svg";
+  });
+
+  playButton.addEventListener("mouseout", (e) => {
+    playButton.src = "icon/play-button-white.svg";
+  });
+
+  /**
+   * nextButton event listeners
+  */
+  nextButton.addEventListener("mouseover", (e) => {
+    nextButton.src = "icon/next-button-black.svg";
+  });
+
+  nextButton.addEventListener("mouseout", (e) => {
+    nextButton.src = "icon/next-button-white.svg";
+  });
+
+  nextButton.addEventListener("click", (e) => {
     e.preventDefault();
     ipcRenderer.send("player:getNextSong", currentSong);
   });
 
-  ipcRenderer.on("player:receiveNextSong", (event, val) => {
-    video.src = val.url;
-    currentSong = val;
+  /**
+   * likeButton event listeners
+  */
+  likeButton.addEventListener("mouseover", (e) => {
+    likeButton.src = "icon/like-button-black.svg";
   });
+
+  likeButton.addEventListener("mouseout", (e) => {
+    likeButton.src = "icon/like-button-white.svg";
+  });
+
+  ipcRenderer.on("player:receiveNextSong", (event, val) => {
+    currentSong = val;
+
+    songName.innerHTML = val.title;
+    songArtist.innerHTML = val.artist;
+    video.src = val.url;
+  });
+
+  // TODO: add length text
+
+  // TODO: move according to current time
+  const moveProgressBar = () => {
+    const bar = document.getElementById("progressBar");
+
+    const update = () => {
+      if (width >= 100) {
+        clearInterval(iv);
+      } else {
+        width++;
+        bar.style.width = String(width) + '%';
+      }
+    };
+
+    let width = 1;
+    let iv = setInterval(update, 10);
+  }
+
+  moveProgressBar();
 </script>
 
 </html>
