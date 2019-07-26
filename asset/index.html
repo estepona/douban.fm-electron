@@ -7,6 +7,27 @@
 </head>
 
 <style>
+  .mainWrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .component {
+    float: left;
+  }
+
+  .component:nth-child(1) {
+    width: 15%;
+  }
+
+  .component:nth-child(2) {
+    width: 55%;
+  }
+
+  .component:nth-child(3) {
+    width: 30%;
+  }
+
   #progressBarParent {
     width: 430px;
     background-color: #ddd;
@@ -20,7 +41,35 @@
 </style>
 
 <body>
-  <div height="30px">
+  <!-- new -->
+  <div class="mainWrapper">
+
+    <div class="component">
+      <img id="pausePlayButton" src="icon/pause-button-white.svg" />
+    </div>
+
+    <div class="component">
+      <div height="30px">
+        <span id="songName"
+          style="font-size:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(3,3,3)">
+        </span>
+      </div>
+      <div height="20px">
+        <span id="songArtist"
+          style="font-size:15px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(74,74,74)">
+        </span>
+      </div>
+      <video autoplay id="video" height="0px" src=""></video>
+    </div>
+
+    <div class="component">
+      <img id="nextButton" src="icon/next-button-white.svg" height="30px" width="30px" />
+      <img id="likeButton" src="icon/like-button-white.svg" height="30px" width="30px" />
+    </div>
+  </div>
+
+  <!-- old -->
+  <!-- <div height="30px">
     <div height="30px">
       <span id="songName"
         style="font-size:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(3,3,3)">
@@ -43,7 +92,7 @@
     <img id="pausePlayButton" src="icon/pause-button-thin.svg" height="30px" width="30px" />
     <img id="nextButton" src="icon/next-button-white.svg" height="30px" width="30px" />
     <img id="likeButton" src="icon/like-button-white.svg" height="30px" width="30px" />
-  </div>
+  </div> -->
 
 </body>
 
@@ -73,7 +122,7 @@
     if (paused) {
       pausePlayButton.src = "icon/play-button-black.svg";
     } else {
-      pausePlayButton.src = "icon/pause-button-thick.svg";
+      pausePlayButton.src = "icon/pause-button-black.svg";
     }
   });
 
@@ -81,7 +130,7 @@
     if (paused) {
       pausePlayButton.src = "icon/play-button-white.svg";
     } else {
-      pausePlayButton.src = "icon/pause-button-thin.svg";
+      pausePlayButton.src = "icon/pause-button-white.svg";
     }
   });
 
@@ -89,7 +138,7 @@
     if (paused) {
       video.play();
       paused = false;
-      pausePlayButton.src = "icon/pause-button-thin.svg";
+      pausePlayButton.src = "icon/pause-button-white.svg";
     } else {
       video.pause();
       paused = true;
@@ -113,7 +162,7 @@
     ipcRenderer.send("player:getNextSong", currentSong);
 
     paused = false;
-    pausePlayButton.src = "icon/pause-button-thin.svg";
+    pausePlayButton.src = "icon/pause-button-white.svg";
   });
 
   /**
@@ -138,23 +187,6 @@
   // TODO: add length text
 
   // TODO: move according to current time
-  const moveProgressBar = () => {
-    const bar = document.getElementById("progressBar");
-
-    const update = () => {
-      if (width >= 100) {
-        clearInterval(iv);
-      } else {
-        width++;
-        bar.style.width = String(width) + '%';
-      }
-    };
-
-    let width = 1;
-    let iv = setInterval(update, 10);
-  }
-
-  moveProgressBar();
 </script>
 
 </html>

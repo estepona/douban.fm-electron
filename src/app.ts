@@ -23,7 +23,7 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
-    height: 250,
+    height: 41 + 100,
     width: 500,
     // frame: false,
     webPreferences: {
@@ -48,7 +48,7 @@ const menuTemplate: Array<Electron.MenuItemConstructorOptions | Electron.MenuIte
           loginWindow = new BrowserWindow({
             title: "Log In",
             width: 300,
-            height: 150,
+            height: 100,
             webPreferences: {
               nodeIntegration: true,
             },
@@ -95,7 +95,7 @@ if (process.env.NODE_ENV === "dev") {
 }
 
 ipcMain.on("login", async (event: Event, vals: string[]) => {
-  const authInfo = await apiClient.login(vals[0], vals[1]);
+  authInfo = await apiClient.login(vals[0], vals[1]);
   writeAuth(authInfo);
 
   const redheartSongs = await apiClient.getRedheartSongs();
