@@ -3,6 +3,10 @@
 ## TODO
 - notification
 - lock to front
+- 窗口边缘阴影
+- 参考itunes缩小
+- 做很小
+- 第二行是artist+album
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

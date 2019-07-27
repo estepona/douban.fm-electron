@@ -23,9 +23,12 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
-    height: 41 + 100,
-    width: 500,
+    // default is 543 x 116
+
+    // height: 41 + 100,
+    // width: 500,
     // frame: false,
+    resizable: process.env.NODE_ENV === "dev" ? true : false,
     webPreferences: {
       nodeIntegration: true,
     },

@@ -2,53 +2,19 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
   <title>douban.fm</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<style>
-  .mainWrapper {
-    width: 100%;
-    height: 100%;
-  }
-
-  .component {
-    float: left;
-  }
-
-  .component:nth-child(1) {
-    width: 15%;
-  }
-
-  .component:nth-child(2) {
-    width: 55%;
-  }
-
-  .component:nth-child(3) {
-    width: 30%;
-  }
-
-  #progressBarParent {
-    width: 430px;
-    background-color: #ddd;
-  }
-
-  #progressBar {
-    width: 1%;
-    height: 10px;
-    background-color: #4CAF50;
-  }
-</style>
-
 <body>
-  <!-- new -->
   <div class="mainWrapper">
 
-    <div class="component">
+    <div class="component column-left">
       <img id="pausePlayButton" src="icon/pause-button-white.svg" height="60px" width="60px" />
     </div>
 
-    <div class="component">
+    <div class="component column-middle">
       <div height="30px">
         <span id="songName"
           style="font-size:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(3,3,3)">
@@ -62,38 +28,11 @@
       <video autoplay id="video" height="0px" src=""></video>
     </div>
 
-    <div class="component">
-      <img id="nextButton" src="icon/next-button-white.svg" height="30px" width="30px" />
-      <img id="likeButton" src="icon/like-button-white.svg" height="30px" width="30px" />
+    <div class="component column-right">
+      <img id="nextButton" class="icon" src="icon/next-button-white.svg" height="30px" width="30px" />
+      <img id="likeButton" class="icon" src="icon/like-button-white.svg" height="30px" width="30px" />
     </div>
   </div>
-
-  <!-- old -->
-  <!-- <div height="30px">
-    <div height="30px">
-      <span id="songName"
-        style="font-size:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(3,3,3)">
-      </span>
-    </div>
-    <div height="20px">
-      <span id="songArtist"
-        style="font-size:15px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(74,74,74)">
-      </span>
-    </div>
-  </div>
-
-  <div id="progressBarParent">
-    <div id="progressBar"></div>
-  </div>
-
-  <video autoplay id="video" height="0px" src=""></video>
-
-  <div id="buttons" style="position:absolute;width:300px">
-    <img id="pausePlayButton" src="icon/pause-button-thin.svg" height="30px" width="30px" />
-    <img id="nextButton" src="icon/next-button-white.svg" height="30px" width="30px" />
-    <img id="likeButton" src="icon/like-button-white.svg" height="30px" width="30px" />
-  </div> -->
-
 </body>
 
 <script>

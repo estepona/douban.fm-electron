@@ -1,0 +1,31 @@
+.mainWrapper {
+  width: 500px;
+  height: 100px;
+  background-color: rgba(250, 250, 250, 0.93);
+}
+
+.component {
+  float: left;
+  height: 100px;
+}
+
+.column-left {
+  width: 100px;
+  background-color: aquamarine;
+}
+
+.column-middle {
+  width: 300px;
+  background-color: burlywood;
+}
+
+.column-right {
+  width: 100px;
+  background-color: darkseagreen;
+}
+
+#pausePlayButton {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
