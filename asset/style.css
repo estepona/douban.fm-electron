@@ -1,31 +1,87 @@
 .mainWrapper {
-  width: 500px;
-  height: 100px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  width: 300px;
+  height: 75px;
   background-color: rgba(250, 250, 250, 0.93);
 }
 
 .component {
-  float: left;
-  height: 100px;
+  height: 100%;
 }
 
-.column-left {
-  width: 100px;
+.col-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 60px;
+
   background-color: aquamarine;
 }
 
-.column-middle {
-  width: 300px;
+.col-middle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  width: 180px;
+
   background-color: burlywood;
 }
 
-.column-right {
-  width: 100px;
+.col-right {
+  display: flex;
+  flex-direction: column;
+
+  width: 60px;
+
   background-color: darkseagreen;
 }
 
+.col-right-up {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  height: 50%;
+}
+
+.col-right-down {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+
+  height: 50%;
+}
+
+.song-text {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, PingFang SC, Source Han Sans CN, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
+  font-weight: 400;
+  margin: 0;
+}
+
+.song-text-big {
+  font-size: 15px;
+  color: rgb(3,3,3);
+}
+
+.song-text-small {
+  font-size: 12px;
+  color: rgb(74,74,74);
+}
+
+.col-right-down-button {
+  width: 20px;
+  height: 20px;
+}
+
 #pausePlayButton {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
 }

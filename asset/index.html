@@ -10,27 +10,22 @@
 <body>
   <div class="mainWrapper">
 
-    <div class="component column-left">
-      <img id="pausePlayButton" src="icon/pause-button-white.svg" height="60px" width="60px" />
+    <div class="component col-left">
+      <img id="pausePlayButton" src="icon/pause-button-white.svg">
     </div>
 
-    <div class="component column-middle">
-      <div height="30px">
-        <span id="songName"
-          style="font-size:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(3,3,3)">
-        </span>
-      </div>
-      <div height="20px">
-        <span id="songArtist"
-          style="font-size:15px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;font-weight:400;color:rgb(74,74,74)">
-        </span>
-      </div>
+    <div class="component col-middle">
+      <p id="songName" class="song-text song-text-big"> </p>
+      <p id="songArtist" class="song-text song-text-small"> </p>
       <video autoplay id="video" height="0px" src=""></video>
     </div>
 
-    <div class="component column-right">
-      <img id="nextButton" class="icon" src="icon/next-button-white.svg" height="30px" width="30px" />
-      <img id="likeButton" class="icon" src="icon/like-button-white.svg" height="30px" width="30px" />
+    <div class="component col-right">
+      <div class="col-right-up song-text-small">sfds</div>
+      <div class="col-right-down">
+        <img id="nextButton" class="col-right-down-button" src="icon/next-button-white.svg">
+        <img id="likeButton" class="col-right-down-button" src="icon/like-button-white.svg">
+      </div>
     </div>
   </div>
 </body>
