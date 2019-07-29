@@ -5,8 +5,10 @@
 - lock to front
 - 窗口边缘阴影
 - 参考itunes缩小
-- 做很小
+- ~~做很小~~
 - 第二行是artist+album
+- 第二行滚动
+- frameless, 所有options放到一个options的图标里
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)
