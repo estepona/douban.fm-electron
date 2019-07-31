@@ -2,8 +2,8 @@ import * as dotenv from "dotenv";
 import { app, BrowserWindow, Event, ipcMain, ipcRenderer, Menu, WebContents } from "electron";
 import * as path from "path";
 
-import apiClient from "./apiClient";
-import { readAuth, writeAuth } from "./auth";
+import apiClient from "./api/apiClient";
+import { readAuth, writeAuth } from "./util/auth";
 
 dotenv.config();
 
@@ -23,20 +23,17 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
-    // default is 543 x 116
-
     height: 60 + 16,
     width: 300 + 16,
     transparent: true,
     frame: false,
     resizable: false,
-    // resizable: process.env.NODE_ENV === "dev" ? true : false,
     webPreferences: {
       nodeIntegration: true,
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, "../asset/index.html"));
+  mainWindow.loadFile(path.join(__dirname, "..", "src", "window", "main", "main.html"));
 
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -59,7 +56,7 @@ const menuTemplate: Array<Electron.MenuItemConstructorOptions | Electron.MenuIte
             },
           });
 
-          loginWindow.loadFile(path.join(__dirname, "../asset/login.html"));
+          loginWindow.loadFile(path.join(__dirname, "..", "src", "window", "login", "login.html"));
 
           loginWindow.on("closed", () => {
             loginWindow = null;

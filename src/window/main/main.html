@@ -4,14 +4,14 @@
 <head>
   <title>douban.fm</title>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="../../asset/style/style.css">
 </head>
 
 <body>
   <div class="mainWrapper">
 
     <div class="component col-left">
-      <img id="pausePlayButton" src="icon/pause-button-white.svg">
+      <img id="pausePlayButton" src="../../asset/icon/pause-button-white.svg">
     </div>
 
     <div class="component col-middle">
@@ -23,8 +23,8 @@
     <div class="component col-right">
       <div class="col-right-up song-text-small">sfds</div>
       <div class="col-right-down">
-        <img id="nextButton" class="col-right-down-button" src="icon/next-button-white.svg">
-        <img id="likeButton" class="col-right-down-button" src="icon/like-button-white.svg">
+        <img id="nextButton" class="col-right-down-button" src="../../asset/icon/next-button-white.svg">
+        <img id="likeButton" class="col-right-down-button" src="../../asset/icon/like-button-white.svg">
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@
   let paused = false;
 
   // default video
-  video.src = path.join(__dirname, "silence.mp4");
+  video.src = path.join(__dirname, "..", "..", "..", "src", "asset", "media", "silence.mp4");
 
   let currentSong = null;
 
@@ -54,17 +54,17 @@
   */
   pausePlayButton.addEventListener("mouseover", (e) => {
     if (paused) {
-      pausePlayButton.src = "icon/play-button-black.svg";
+      pausePlayButton.src = "../../asset/icon/play-button-black.svg";
     } else {
-      pausePlayButton.src = "icon/pause-button-black.svg";
+      pausePlayButton.src = "../../asset/icon/pause-button-black.svg";
     }
   });
 
   pausePlayButton.addEventListener("mouseout", (e) => {
     if (paused) {
-      pausePlayButton.src = "icon/play-button-white.svg";
+      pausePlayButton.src = "../../asset/icon/play-button-white.svg";
     } else {
-      pausePlayButton.src = "icon/pause-button-white.svg";
+      pausePlayButton.src = "../../asset/icon/pause-button-white.svg";
     }
   });
 
@@ -72,11 +72,11 @@
     if (paused) {
       video.play();
       paused = false;
-      pausePlayButton.src = "icon/pause-button-white.svg";
+      pausePlayButton.src = "../../asset/icon/pause-button-white.svg";
     } else {
       video.pause();
       paused = true;
-      pausePlayButton.src = "icon/play-button-white.svg";
+      pausePlayButton.src = "../../asset/icon/play-button-white.svg";
     }
   })
 
@@ -84,11 +84,11 @@
    * nextButton event listeners
   */
   nextButton.addEventListener("mouseover", (e) => {
-    nextButton.src = "icon/next-button-black.svg";
+    nextButton.src = "../../asset/icon/next-button-black.svg";
   });
 
   nextButton.addEventListener("mouseout", (e) => {
-    nextButton.src = "icon/next-button-white.svg";
+    nextButton.src = "../../asset/icon/next-button-white.svg";
   });
 
   nextButton.addEventListener("click", (e) => {
@@ -96,18 +96,18 @@
     ipcRenderer.send("player:getNextSong", currentSong);
 
     paused = false;
-    pausePlayButton.src = "icon/pause-button-white.svg";
+    pausePlayButton.src = "../../asset/icon/pause-button-white.svg";
   });
 
   /**
    * likeButton event listeners
   */
   likeButton.addEventListener("mouseover", (e) => {
-    likeButton.src = "icon/like-button-black.svg";
+    likeButton.src = "../../asset/icon/like-button-black.svg";
   });
 
   likeButton.addEventListener("mouseout", (e) => {
-    likeButton.src = "icon/like-button-white.svg";
+    likeButton.src = "../../asset/icon/like-button-white.svg";
   });
 
   ipcRenderer.on("player:receiveNextSong", (event, val) => {

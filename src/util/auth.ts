@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-const authPath = path.join(__dirname, "../auth.json");
+const authPath = path.join(__dirname, "../../auth.json");
 
 export const readAuth = (): IAuthInfo | null => {
   try {
