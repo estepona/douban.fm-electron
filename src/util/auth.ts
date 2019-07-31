@@ -24,3 +24,9 @@ export const writeAuth = (authInfo: AuthInfo | null) => {
   const data = JSON.stringify(authInfo || {});
   fs.writeFileSync(authPath, data);
 };
+
+export const resetAuth = () => {
+  if (fs.existsSync(authPath)) {
+    fs.unlinkSync(authPath);
+  }
+};

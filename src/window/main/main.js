@@ -1,5 +1,4 @@
 const electron = require('electron');
-const path = require('path');
 const { ipcRenderer } = electron;
 
 const video = document.querySelector('#video');
@@ -10,10 +9,6 @@ const nextButton = document.querySelector('#nextButton');
 const likeButton = document.querySelector('#likeButton');
 
 let paused = false;
-
-// default video
-video.src = path.join(__dirname, '..', '..', '..', 'src', 'asset', 'media', 'silence.mp4');
-
 let currentSong = null;
 
 /**
@@ -88,6 +83,25 @@ moreButton.addEventListener('mouseout', e => {
   moreButton.src = '../../asset/icon/more-button-horizontal-white.svg';
 });
 
+moreButton.addEventListener('click', e => {
+  e.preventDefault();
+  ipcRenderer.send('app:openOptionMenu');
+});
+
+/**
+ * video event listeners
+ */
+video.addEventListener('ended', e => {
+  e.preventDefault();
+  ipcRenderer.send('player:getNextSong', currentSong);
+
+  paused = false;
+  pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
+});
+
+/**
+ * ipc communication
+ */
 ipcRenderer.on('player:receiveNextSong', (event, val) => {
   currentSong = val;
 

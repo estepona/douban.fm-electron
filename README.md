@@ -2,21 +2,25 @@
 
 ## TODO
 - system tray control
-- lock to front
+- ~~option - set on top~~
 - ~~ready position of main~~
-- ready position of login
+- disable login option if logged in
+- ~~ready position of login~~
 - style of login
-- js in separate folder
+- ~~js in separate folder~~
 - ~~窗口边缘阴影~~
 - ~~参考itunes缩小~~
 - ~~做很小~~
 - 第二行是artist+album
 - 第二行滚动
 - ~~frameless~~
-- 所有options放到一个options的图标里
-- 音乐结束自动下一首
+- ~~option icon~~
+- ~~所有options放到一个options的图标里~~
+- option menu style
+- ~~音乐结束自动下一首~~
 - options - refresh
 - loading default text
+- set up vscode debugger
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

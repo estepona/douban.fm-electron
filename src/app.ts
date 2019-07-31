@@ -1,18 +1,31 @@
 import * as dotenv from 'dotenv';
-import { app, BrowserWindow, Event, ipcMain, ipcRenderer, Menu, screen as Screen, WebContents } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  Event,
+  ipcMain,
+  ipcRenderer,
+  Menu,
+  screen as Screen,
+  WebContents,
+  MenuItem,
+} from 'electron';
 import * as path from 'path';
 
 import apiClient from './api/apiClient';
-import { readAuth, writeAuth } from './util/auth';
+import { readAuth, writeAuth, resetAuth } from './util/auth';
 
 dotenv.config();
 
 let authInfo = readAuth();
 
-let mainWindow: Electron.BrowserWindow | null;
+/**
+ * window
+ */
+let mainWindow: BrowserWindow | null;
 let loginWindow: BrowserWindow | null;
 
-const createWindow = async () => {
+const createMainWindow = async () => {
   if (authInfo) {
     apiClient.setAccessToken(authInfo.access_token);
 
@@ -46,63 +59,96 @@ const createWindow = async () => {
   });
 };
 
-const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuItem | {})[] = [
-  {
-    label: '菜单',
-    submenu: [
-      {
-        label: '登录',
-        click: () => {
-          loginWindow = new BrowserWindow({
-            title: 'Log In',
-            width: 300,
-            height: 100,
-            webPreferences: {
-              nodeIntegration: true,
-            },
-          });
+const createLoginWindow = () => {
+  loginWindow = new BrowserWindow({
+    width: 300 + 16,
+    height: 60 + 16,
 
-          loginWindow.loadFile(path.join(__dirname, '..', 'src', 'window', 'login', 'login.html'));
-
-          loginWindow.on('closed', () => {
-            loginWindow = null;
-          });
-        },
-        // create log in window
-      },
-      {
-        label: '登出',
-      },
-      {
-        label: '退出',
-        accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Alt+F4',
-        click: () => {
-          app.quit();
-        },
-      },
-    ],
-  },
-];
-
-if (process.platform === 'darwin') {
-  menuTemplate.unshift({});
-}
-
-if (process.env.NODE_ENV === 'dev') {
-  menuTemplate.push({
-    label: 'dev',
-    submenu: [
-      {
-        label: 'togger dev tools',
-        click: (item, focusedWindow) => {
-          focusedWindow.webContents.toggleDevTools();
-        },
-      },
-    ],
+    transparent: true,
+    frame: false,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
-}
 
-ipcMain.on('login', async (event: Event, vals: string[]) => {
+  loginWindow.loadFile(path.join(__dirname, '..', 'src', 'window', 'login', 'login.html'));
+};
+
+/**
+ * menu
+ */
+const optionMenu = new Menu();
+
+let isMainWindowSetTop = false;
+
+optionMenu.append(
+  new MenuItem({
+    label: '登录',
+    enabled: !authInfo,
+    click: () => {
+      !loginWindow && createLoginWindow();
+      loginWindow && loginWindow.show();
+    },
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: '登出',
+    enabled: authInfo !== null,
+    click: () => {
+      resetAuth();
+      authInfo = null;
+      optionMenu.items[0].enabled = true;
+    },
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    type: 'separator',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: '我的',
+    enabled: authInfo !== null,
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: '兆赫',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    type: 'separator',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: '置顶',
+    type: 'checkbox',
+    checked: isMainWindowSetTop,
+    click: () => {
+      mainWindow && mainWindow.setAlwaysOnTop(!isMainWindowSetTop);
+      isMainWindowSetTop = !isMainWindowSetTop;
+    },
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: '退出',
+    accelerator: 'Alt+F4',
+    click: () => {
+      app.quit();
+    },
+  }),
+);
+
+/**
+ * ipc communication
+ */
+ipcMain.on('user:login', async (event: Event, vals: string[]) => {
   authInfo = await apiClient.login(vals[0], vals[1]);
   writeAuth(authInfo);
 
@@ -112,31 +158,45 @@ ipcMain.on('login', async (event: Event, vals: string[]) => {
   if (loginWindow) {
     loginWindow.close();
   }
+
+  // if sucess, disable the button in menu;
 });
 
 ipcMain.on('player:getNextSong', async (event: Event, val: Song | null) => {
-  const song =
-    val && val.sid
-      ? await apiClient.getDoubanSelectedSong(false, val.sid)
-      : await apiClient.getDoubanSelectedSong(true);
+  let song: Song | null = null;
 
-  console.log(val && val.sid);
+  if (val && val.sid) {
+    song = await apiClient.getDoubanSelectedSong(false, val.sid);
+  }
+
+  while (!song) {
+    song = await apiClient.getDoubanSelectedSong(true);
+  }
+
+  console.log(`prev: ${val && val.title}, next: song && song.title`);
 
   event.sender.send('player:receiveNextSong', song);
 });
 
-app.on('ready', async () => {
-  await createWindow();
+ipcMain.on('app:openOptionMenu', (event: Event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  optionMenu.popup({
+    window: win,
+  });
+});
 
-  const menu = Menu.buildFromTemplate(menuTemplate);
-  Menu.setApplicationMenu(menu);
+/**
+ * app
+ */
+app.on('ready', async () => {
+  await createMainWindow();
 
   let song: Song | null = null;
   while (!song) {
     song = await apiClient.getDoubanSelectedSong(true);
   }
 
-  console.log('new song');
+  console.log(`new song: ${song.title}`);
   mainWindow && mainWindow.webContents.send('player:receiveNextSong', song);
 });
 
@@ -148,6 +208,6 @@ app.on('window-all-closed', () => {
 
 app.on('activate', async () => {
   if (!mainWindow) {
-    await createWindow();
+    await createMainWindow();
   }
 });

@@ -10,5 +10,5 @@ form.addEventListener('submit', e => {
 
   console.log(username, password);
 
-  ipcRenderer.send('login', [username, password]);
+  ipcRenderer.send('user:login', [username, password]);
 });
