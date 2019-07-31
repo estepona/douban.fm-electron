@@ -1,4 +1,4 @@
-declare type IUrl = string;
+declare type Url = string;
 
 declare type Timestamp = number;
 

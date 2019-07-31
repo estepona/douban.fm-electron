@@ -1,11 +1,11 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from 'fs';
+import * as path from 'path';
 
-const authPath = path.join(__dirname, "../../auth.json");
+const authPath = path.join(__dirname, '../../auth.json');
 
-export const readAuth = (): IAuthInfo | null => {
+export const readAuth = (): AuthInfo | null => {
   try {
-    const authInfo: IAuthInfo = JSON.parse(fs.readFileSync(authPath, "utf8"));
+    const authInfo: AuthInfo = JSON.parse(fs.readFileSync(authPath, 'utf8'));
 
     if (Object.keys(authInfo).length === 0) {
       return null;
@@ -16,7 +16,7 @@ export const readAuth = (): IAuthInfo | null => {
   }
 };
 
-export const writeAuth = (authInfo: IAuthInfo | null) => {
+export const writeAuth = (authInfo: AuthInfo | null) => {
   if (fs.existsSync(authPath)) {
     fs.unlinkSync(authPath);
   }

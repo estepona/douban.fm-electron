@@ -1,54 +1,54 @@
-declare type ISongFileExtension = 'mp3';
+declare type SongFileExtension = 'mp3';
 
-declare interface ISongSource {
-  confidence: number,
-  source_full_name: string,
-  file_url: IUrl | null,
+declare interface SongSource {
+  confidence: number;
+  source_full_name: string;
+  file_url: Url | null;
   // source short name
-  source: string,
-  source_id: string,
-  playable: boolean,
-  page_url: IUrl,
+  source: string;
+  source_id: string;
+  playable: boolean;
+  page_url: Url;
 }
 
-declare interface ISong {
-  all_play_sources: ISongSource,
-  albumtitle: string,
-  file_ext: ISongFileExtension,
-  album: string,
-  ssid: string,
-  title: string,
-  subtype?: string,
+declare interface Song {
+  all_play_sources: SongSource;
+  albumtitle: string;
+  file_ext: SongFileExtension;
+  album: string;
+  ssid: string;
+  title: string;
+  subtype?: string;
   // SongId
-  sid: string,
-  sha256: string,
-  status: number,
-  picture: IUrl,
-  update_time: Timestamp,
-  alert_msg: string,
-  is_douban_playable: boolean,
-  public_time: string,
-  partner_sources?: string[],
-  singers: IArtist[],
-  artist: string,
-  is_royal: boolean,
+  sid: string;
+  sha256: string;
+  status: number;
+  picture: Url;
+  update_time: Timestamp;
+  alert_msg: string;
+  is_douban_playable: boolean;
+  public_time: string;
+  partner_sources?: string[];
+  singers: Artist[];
+  artist: string;
+  is_royal: boolean;
   // resource url
-  url: IUrl,
+  url: Url;
   // length in seconds
-  length: number,
+  length: number;
   // album release info
   release: {
-    ssid: string,
-    title: string,
-    cover: IUrl,
-    link: IUrl,
-    singers: IArtistShort[],
+    ssid: string;
+    title: string;
+    cover: Url;
+    link: Url;
+    singers: ArtistShort[];
     // Number(AlbumId)
-    id: number,
-  },
-  aid: AlbumId,
+    id: number;
+  };
+  aid: AlbumId;
   // Number(kbps)
-  kbps: string,
+  kbps: string;
   // <kbps, unknown number>
-  available_formats: Record<string, number>,
+  available_formats: Record<string, number>;
 }
