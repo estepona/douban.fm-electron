@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="../../asset/style/style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="../../asset/style/style.css">
-</head>
+  <body>
+    <div class="lv1-container lv1-container-main">
+      <div class="component col-left">
+        <img id="pausePlayButton" class="non-draggable" src="../../asset/icon/pause-button-white.svg" />
+      </div>
 
-<body>
-  <div class="mainWrapper">
+      <div class="component col-middle">
+        <p id="songName" class="song-text song-text-big"></p>
+        <p id="songArtist" class="song-text song-text-small"></p>
+        <video autoplay id="video" height="0px" src=""></video>
+      </div>
 
-    <div class="component col-left">
-      <img id="pausePlayButton" class="non-draggable" src="../../asset/icon/pause-button-white.svg">
-    </div>
-
-    <div class="component col-middle">
-      <p id="songName" class="song-text song-text-big"> </p>
-      <p id="songArtist" class="song-text song-text-small"> </p>
-      <video autoplay id="video" height="0px" src=""></video>
-    </div>
-
-    <div class="component col-right">
-      <div class="col-right-up song-text-small">sfds</div>
-      <div class="col-right-down">
-        <img id="nextButton" class="col-right-down-button non-draggable" src="../../asset/icon/next-button-white.svg">
-        <img id="likeButton" class="col-right-down-button non-draggable" src="../../asset/icon/like-button-white.svg">
-        <img id="moreButton" class="col-right-down-button non-draggable" src="../../asset/icon/more-button-horizontal-white.svg">
+      <div class="component col-right">
+        <div class="col-right-up song-text-small">sfds</div>
+        <div class="col-right-down">
+          <img
+            id="nextButton"
+            class="col-right-down-button non-draggable"
+            src="../../asset/icon/next-button-white.svg"
+          />
+          <img
+            id="likeButton"
+            class="col-right-down-button non-draggable"
+            src="../../asset/icon/like-button-white.svg"
+          />
+          <img
+            id="moreButton"
+            class="col-right-down-button non-draggable"
+            src="../../asset/icon/more-button-horizontal-white.svg"
+          />
+        </div>
       </div>
     </div>
-  </div>
-</body>
+  </body>
 
-<script src="main.js"></script>
-
+  <script src="main.js"></script>
 </html>

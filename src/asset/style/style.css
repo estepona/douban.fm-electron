@@ -9,22 +9,31 @@ body {
   -webkit-app-region: no-drag;
 }
 
-.mainWrapper {
+.lv1-container {
+  width: 300px;
+
+  border-radius: 8px;
+
+  background: #f2f2f2;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+}
+
+.lv1-container-main {
+  height: 60px;
+
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+}
 
-  width: 300px;
-  height: 60px;
-  background: #f2f2f2;
+.lv1-container-login {
+  height: 100px;
 
-  /* white */
-  /* box-shadow: 0px 0px 5px 1px rgba(181,203,230,0.8); */
-
-  /* black */
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
-
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .component {
@@ -32,70 +41,72 @@ body {
 }
 
 .col-left {
+  width: 60px;
+  
   display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 60px;
 
   /* dev */
   /* background: aquamarine; */
 }
 
 .col-middle {
+  width: 160px;
+  
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-
-  width: 160px;
 
   /* dev */
   /* background: burlywood; */
 }
 
 .col-right {
+  width: 80px;
+  
   display: flex;
   flex-direction: column;
-
-  width: 80px;
 
   /* dev */
   /* background: darkseagreen; */
 }
 
 .col-right-up {
+  height: 50%;
+  
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
-  height: 50%;
 }
 
 .col-right-down {
+  height: 50%;
+  
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
-
-  height: 50%;
 }
 
 .song-text {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, PingFang SC, Source Han Sans CN, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
-  font-weight: 400;
   margin: 0;
+
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, PingFang SC, Source Han Sans CN,
+    Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
+  font-weight: 400;
 }
 
 .song-text-big {
   font-size: 15px;
-  color: rgb(3,3,3);
+  color: rgb(3, 3, 3);
 }
 
 .song-text-small {
   font-size: 12px;
-  color: rgb(74,74,74);
+  color: rgb(74, 74, 74);
 }
 
 .col-right-down-button {
@@ -110,10 +121,17 @@ body {
 
 .login-input {
   width: 50%;
+
   box-sizing: border-box;
   border: none;
-  border-bottom: 2px solid grey;
+  border-bottom: 1px solid grey;
   outline: none;
 
+  background: #f2f2f2;
+
   text-align: center;
+}
+
+button {
+  cursor: pointer;
 }

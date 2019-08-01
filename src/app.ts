@@ -52,7 +52,7 @@ const createMainWindow = async () => {
 const createLoginWindow = () => {
   loginWindow = new BrowserWindow({
     width: 300 + 16,
-    height: 60 + 16,
+    height: 100 + 16,
 
     transparent: true,
     frame: false,
@@ -89,8 +89,13 @@ optionMenu.append(
     click: () => {
       resetAuth();
       authInfo = null;
+
+      // enable login
       optionMenu.items[0].enabled = true;
+      // disable logout
       optionMenu.items[1].enabled = false;
+      // digable personal
+      optionMenu.items[3].enabled = false;
     },
   }),
 );
@@ -103,11 +108,26 @@ optionMenu.append(
   new MenuItem({
     label: '我的',
     enabled: authInfo !== null,
+    submenu: [
+      {
+        label: '私人',
+      },
+      {
+        label: '红心',
+      },
+    ],
   }),
 );
 optionMenu.append(
   new MenuItem({
     label: '兆赫',
+    submenu: [
+      {
+        label: '豆瓣精选',
+        type: 'checkbox',
+        checked: true,
+      },
+    ],
   }),
 );
 optionMenu.append(
@@ -132,6 +152,11 @@ optionMenu.append(
 );
 optionMenu.append(
   new MenuItem({
+    label: '刷新',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
     label: '置顶',
     type: 'checkbox',
     checked: isMainWindowSetTop,
@@ -144,7 +169,7 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: '退出',
-    accelerator: 'Alt+F4',
+    accelerator: process.platform === 'win32' ? 'Alt+F4' : 'CommandOrControl+Q',
     click: () => {
       app.quit();
     },
@@ -158,14 +183,19 @@ ipcMain.on('user:login', async (event: Event, vals: string[]) => {
   authInfo = await apiClient.login(vals[0], vals[1]);
   writeAuth(authInfo);
 
-  const redheartSongs = await apiClient.getRedheartSongs();
-  console.log(redheartSongs);
+  // const redheartSongs = await apiClient.getRedheartSongs();
+  // console.log(redheartSongs);
 
   if (loginWindow) {
     loginWindow.close();
   }
 
-  // if sucess, disable the button in menu;
+  // disable login
+  optionMenu.items[0].enabled = false;
+  // enable logout
+  optionMenu.items[1].enabled = true;
+  // enable personal
+  optionMenu.items[3].enabled = true;
 });
 
 ipcMain.on('player:getNextSong', async (event: Event, val: Song | null) => {

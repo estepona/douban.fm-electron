@@ -24,6 +24,12 @@
 - about page
 - pateon page
 - 各种快捷键
+- 图标
+- 播放图标和文字距离远点儿
+- 艺术家文字小点儿
+- 鼠标移到时间整个窗口变成进度条
+- style button
+- english support
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)
