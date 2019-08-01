@@ -21,6 +21,9 @@
 - options - refresh
 - loading default text
 - set up vscode debugger
+- about page
+- pateon page
+- 各种快捷键
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

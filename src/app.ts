@@ -1,15 +1,5 @@
 import * as dotenv from 'dotenv';
-import {
-  app,
-  BrowserWindow,
-  Event,
-  ipcMain,
-  ipcRenderer,
-  Menu,
-  screen as Screen,
-  WebContents,
-  MenuItem,
-} from 'electron';
+import { app, BrowserWindow, Event, ipcMain, Menu, screen as Screen, WebContents, MenuItem } from 'electron';
 import * as path from 'path';
 
 import apiClient from './api/apiClient';
@@ -100,6 +90,7 @@ optionMenu.append(
       resetAuth();
       authInfo = null;
       optionMenu.items[0].enabled = true;
+      optionMenu.items[1].enabled = false;
     },
   }),
 );
@@ -117,6 +108,21 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: '兆赫',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    type: 'separator',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: 'GitHub',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: 'Sponsor',
   }),
 );
 optionMenu.append(

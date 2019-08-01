@@ -5,6 +5,10 @@ body {
   -webkit-app-region: drag;
 }
 
+.non-draggable {
+  -webkit-app-region: no-drag;
+}
+
 .mainWrapper {
   display: flex;
   flex-direction: row;
@@ -97,13 +101,19 @@ body {
 .col-right-down-button {
   width: 20px;
   height: 20px;
-
-  -webkit-app-region: no-drag;
 }
 
 #pausePlayButton {
   width: 50px;
   height: 50px;
+}
 
-  -webkit-app-region: no-drag;
+.login-input {
+  width: 50%;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid grey;
+  outline: none;
+
+  text-align: center;
 }
