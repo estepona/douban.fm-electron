@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { app, BrowserWindow, Event, ipcMain, Menu, screen as Screen, WebContents, MenuItem } from 'electron';
+import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell } from 'electron';
 import * as path from 'path';
 
 import apiClient from './api/apiClient';
@@ -29,7 +29,7 @@ const createMainWindow = async () => {
     }
   }
 
-  const primaryResoultion = Screen.getPrimaryDisplay().workAreaSize;
+  const primaryResoultion = screen.getPrimaryDisplay().workAreaSize;
 
   mainWindow = new BrowserWindow({
     width: 300 + 16,
@@ -77,6 +77,10 @@ const createLoginWindow = () => {
   });
 
   loginWindow.loadFile(loginHtmlPath);
+
+  loginWindow.on('closed', () => {
+    loginWindow = null;
+  });
 };
 
 /**
@@ -152,6 +156,9 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: 'GitHub',
+    click: () => {
+      shell.openExternal('https://github.com/estepona/douban.fm-electron');
+    },
   }),
 );
 optionMenu.append(
@@ -171,11 +178,6 @@ optionMenu.append(
 );
 optionMenu.append(
   new MenuItem({
-    label: '更新',
-  }),
-);
-optionMenu.append(
-  new MenuItem({
     label: '置顶',
     type: 'checkbox',
     checked: isMainWindowSetTop,
@@ -183,6 +185,11 @@ optionMenu.append(
       mainWindow && mainWindow.setAlwaysOnTop(!isMainWindowSetTop);
       isMainWindowSetTop = !isMainWindowSetTop;
     },
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: '检查更新',
   }),
 );
 optionMenu.append(
@@ -261,14 +268,14 @@ app.on('ready', async () => {
   mainWindow && mainWindow.webContents.send('main:receiveNextSong', song);
 });
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
 app.on('activate', async () => {
   if (!mainWindow) {
     await createMainWindow();
+  }
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
   }
 });

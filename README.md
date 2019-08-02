@@ -32,6 +32,9 @@
 - english support
 - console.log 有utf-8问题
 - ~~登录成功自动3S后关闭，文字在消息里~~
+- 安装
+- 更新版本
+- redheart -> liked
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)
