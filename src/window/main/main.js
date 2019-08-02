@@ -55,7 +55,7 @@ nextButton.addEventListener('mouseout', e => {
 
 nextButton.addEventListener('click', e => {
   e.preventDefault();
-  ipcRenderer.send('player:getNextSong', currentSong);
+  ipcRenderer.send('main:getNextSong', currentSong);
 
   paused = false;
   pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
@@ -85,7 +85,7 @@ moreButton.addEventListener('mouseout', e => {
 
 moreButton.addEventListener('click', e => {
   e.preventDefault();
-  ipcRenderer.send('app:openOptionMenu');
+  ipcRenderer.send('main:openOptionMenu');
 });
 
 /**
@@ -93,16 +93,16 @@ moreButton.addEventListener('click', e => {
  */
 video.addEventListener('ended', e => {
   e.preventDefault();
-  ipcRenderer.send('player:getNextSong', currentSong);
+  ipcRenderer.send('main:getNextSong', currentSong);
 
   paused = false;
   pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
 });
 
 /**
- * ipc communication
+ * ipc
  */
-ipcRenderer.on('player:receiveNextSong', (event, val) => {
+ipcRenderer.on('main:receiveNextSong', (event, val) => {
   currentSong = val;
 
   songName.innerHTML = val.title;

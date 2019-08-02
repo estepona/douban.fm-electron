@@ -4,9 +4,9 @@
 - system tray control
 - ~~option - set on top~~
 - ~~ready position of main~~
-- disable login option if logged in
+- ~~disable login option if logged in~~
 - ~~ready position of login~~
-- style of login
+- ~~style of login~~
 - ~~js in separate folder~~
 - ~~窗口边缘阴影~~
 - ~~参考itunes缩小~~
@@ -22,14 +22,16 @@
 - loading default text
 - set up vscode debugger
 - about page
-- pateon page
+- sponsor page
 - 各种快捷键
-- 图标
+- ~~图标~~
 - 播放图标和文字距离远点儿
 - 艺术家文字小点儿
 - 鼠标移到时间整个窗口变成进度条
 - style button
 - english support
+- console.log 有utf-8问题
+- ~~登录成功自动3S后关闭，文字在消息里~~
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

@@ -32,10 +32,10 @@ class ApiClient {
     })
       .then(res => res.data)
       .catch(err => {
-        try {
-          return console.log(`douban.fm 登录失败, ${err.response.data.msg}`);
-        } catch {
-          return console.log('douban.fm 登录失败');
+        if (err.response && err.response.data && err.response.data.msg) {
+          throw Error(`${err.response.data.msg}`);
+        } else {
+          throw Error('unknown error');
         }
       });
 

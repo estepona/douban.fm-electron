@@ -15,6 +15,10 @@ let authInfo = readAuth();
 let mainWindow: BrowserWindow | null;
 let loginWindow: BrowserWindow | null;
 
+const appIconPath = path.join(__dirname, '..', 'src', 'asset', 'icon', 'doubanfm-icon-grey.png');
+const mainHtmlPath = path.join(__dirname, '..', 'src', 'window', 'main', 'main.html');
+const loginHtmlPath = path.join(__dirname, '..', 'src', 'window', 'login', 'login.html');
+
 const createMainWindow = async () => {
   if (authInfo) {
     apiClient.setAccessToken(authInfo.access_token);
@@ -34,15 +38,20 @@ const createMainWindow = async () => {
     x: primaryResoultion.width / 2 - (300 + 16) / 2,
     y: primaryResoultion.height / 10,
 
+    title: 'douban.fm客户端',
+    icon: appIconPath,
+
     transparent: true,
     frame: false,
     resizable: false,
+    fullscreenable: false,
+
     webPreferences: {
       nodeIntegration: true,
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, '..', 'src', 'window', 'main', 'main.html'));
+  mainWindow.loadFile(mainHtmlPath);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -52,17 +61,22 @@ const createMainWindow = async () => {
 const createLoginWindow = () => {
   loginWindow = new BrowserWindow({
     width: 300 + 16,
-    height: 100 + 16,
+    height: 120 + 16,
+
+    title: 'douban.fm登录',
+    icon: appIconPath,
 
     transparent: true,
     frame: false,
     resizable: false,
+    fullscreenable: false,
+
     webPreferences: {
       nodeIntegration: true,
     },
   });
 
-  loginWindow.loadFile(path.join(__dirname, '..', 'src', 'window', 'login', 'login.html'));
+  loginWindow.loadFile(loginHtmlPath);
 };
 
 /**
@@ -157,6 +171,11 @@ optionMenu.append(
 );
 optionMenu.append(
   new MenuItem({
+    label: '更新',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
     label: '置顶',
     type: 'checkbox',
     checked: isMainWindowSetTop,
@@ -177,28 +196,34 @@ optionMenu.append(
 );
 
 /**
- * ipc communication
+ * ipc
  */
-ipcMain.on('user:login', async (event: Event, vals: string[]) => {
-  authInfo = await apiClient.login(vals[0], vals[1]);
-  writeAuth(authInfo);
+ipcMain.on('login:login', async (event: Event, vals: string[]) => {
+  try {
+    authInfo = await apiClient.login(vals[0], vals[1]);
+    writeAuth(authInfo);
 
-  // const redheartSongs = await apiClient.getRedheartSongs();
-  // console.log(redheartSongs);
+    // disable login
+    optionMenu.items[0].enabled = false;
+    // enable logout
+    optionMenu.items[1].enabled = true;
+    // enable personal
+    optionMenu.items[3].enabled = true;
 
-  if (loginWindow) {
-    loginWindow.close();
+    event.sender.send('login:success');
+  } catch (error) {
+    event.sender.send('login:fail', error.message);
   }
-
-  // disable login
-  optionMenu.items[0].enabled = false;
-  // enable logout
-  optionMenu.items[1].enabled = true;
-  // enable personal
-  optionMenu.items[3].enabled = true;
 });
 
-ipcMain.on('player:getNextSong', async (event: Event, val: Song | null) => {
+ipcMain.on('login:close', () => {
+  if (loginWindow) {
+    loginWindow.close();
+    loginWindow = null;
+  }
+});
+
+ipcMain.on('main:getNextSong', async (event: Event, val: Song | null) => {
   let song: Song | null = null;
 
   if (val && val.sid) {
@@ -211,10 +236,10 @@ ipcMain.on('player:getNextSong', async (event: Event, val: Song | null) => {
 
   console.log(`prev: ${val && val.title}, next: song && song.title`);
 
-  event.sender.send('player:receiveNextSong', song);
+  event.sender.send('main:receiveNextSong', song);
 });
 
-ipcMain.on('app:openOptionMenu', (event: Event) => {
+ipcMain.on('main:openOptionMenu', (event: Event) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   optionMenu.popup({
     window: win,
@@ -233,7 +258,7 @@ app.on('ready', async () => {
   }
 
   console.log(`new song: ${song.title}`);
-  mainWindow && mainWindow.webContents.send('player:receiveNextSong', song);
+  mainWindow && mainWindow.webContents.send('main:receiveNextSong', song);
 });
 
 app.on('window-all-closed', () => {

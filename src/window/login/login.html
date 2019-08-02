@@ -7,9 +7,25 @@
 
   <body>
     <form class="lv1-container lv1-container-login">
-      <input type="text" class="song-text song-text-small login-input non-draggable" id="username" placeholder="username" autofocus>
-      <input type="password" class="song-text song-text-small login-input non-draggable" id="password" placeholder="password" autofocus>
-      <button type="submit" class="non-draggable">登录</button>
+      <input
+        type="text"
+        class="base-text base-text-small-grey login-input non-draggable"
+        id="username"
+        placeholder="username"
+        autofocus
+      />
+      <input
+        type="password"
+        class="base-text base-text-small-grey login-input non-draggable"
+        id="password"
+        placeholder="password"
+        autofocus
+      />
+      <div>
+        <button type="submit" class="base-text-small-grey non-draggable">登录</button>
+        <button type="button" id="login-close-button" class="base-text-small-grey non-draggable">关闭</button>
+      </div>
+      <p id="login-msg" class="base-text base-text-small-background">登录信息</p>
     </form>
   </body>
 
