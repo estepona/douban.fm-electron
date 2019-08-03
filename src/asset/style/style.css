@@ -41,19 +41,20 @@ body {
 }
 
 .col-left {
-  width: 60px;
-  
+  width: 65px;
+
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
   /* dev */
   /* background: aquamarine; */
 }
 
 .col-middle {
-  width: 160px;
-  
+  width: 155px;
+
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -65,7 +66,7 @@ body {
 
 .col-right {
   width: 80px;
-  
+
   display: flex;
   flex-direction: column;
 
@@ -75,7 +76,7 @@ body {
 
 .col-right-up {
   height: 50%;
-  
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -84,7 +85,7 @@ body {
 
 .col-right-down {
   height: 50%;
-  
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -109,6 +110,25 @@ body {
   color: #f2f2f2;
 }
 
+.marquee {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+
+  animation: 5s wordsLoop linear infinite normal;
+}
+
+@keyframes wordsLoop {
+  0% {
+    transform: translateX(0px);
+    -webkit-transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+  }
+}
+
 .col-right-down-button {
   width: 20px;
   height: 20px;
@@ -122,6 +142,8 @@ body {
 #pausePlayButton {
   width: 50px;
   height: 50px;
+
+  margin-left: 5px;
 }
 
 .login-input {

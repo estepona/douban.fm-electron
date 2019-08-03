@@ -174,6 +174,7 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: '刷新',
+    accelerator: process.platform === 'win32' ? 'F5' : 'CommandOrControl+R',
   }),
 );
 optionMenu.append(
@@ -181,6 +182,7 @@ optionMenu.append(
     label: '置顶',
     type: 'checkbox',
     checked: isMainWindowSetTop,
+    accelerator: process.platform === 'win32' ? 'Alt+F3' : 'CommandOrControl+E',
     click: () => {
       mainWindow && mainWindow.setAlwaysOnTop(!isMainWindowSetTop);
       isMainWindowSetTop = !isMainWindowSetTop;
