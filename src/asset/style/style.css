@@ -60,6 +60,8 @@ body {
   align-items: flex-start;
   justify-content: center;
 
+  overflow: hidden;
+
   /* dev */
   /* background: burlywood; */
 }
@@ -116,6 +118,7 @@ body {
   white-space: nowrap;
 
   animation: 5s wordsLoop linear infinite normal;
+  /* animation-direction: alternate; */
 }
 
 @keyframes wordsLoop {
@@ -124,8 +127,8 @@ body {
     -webkit-transform: translateX(0px);
   }
   100% {
-    transform: translateX(100%);
-    -webkit-transform: translateX(100%);
+    transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
   }
 }
 
