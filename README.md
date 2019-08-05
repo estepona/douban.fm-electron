@@ -11,8 +11,8 @@
 - ~~窗口边缘阴影~~
 - ~~参考itunes缩小~~
 - ~~做很小~~
-- 第二行是artist+album
-- 第二行滚动
+- ~~第二行是artist+album~~
+- ~~第二行滚动~~
 - ~~frameless~~
 - ~~option icon~~
 - ~~所有options放到一个options的图标里~~
@@ -36,6 +36,9 @@
 - 安装
 - 更新版本
 - redheart -> liked
+- mac上显示icon和title有问题
+- 置顶快捷键不管用
+- 滚动长度的界定应该从css里拿到width，而不是hardcode 155
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

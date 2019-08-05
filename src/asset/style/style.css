@@ -103,12 +103,12 @@ body {
 }
 
 .base-text-small-grey {
-  font-size: 12px;
+  font-size: 11px;
   color: rgb(74, 74, 74);
 }
 
 .base-text-small-background {
-  font-size: 12px;
+  font-size: 11px;
   color: #f2f2f2;
 }
 
@@ -116,19 +116,18 @@ body {
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
+}
 
-  animation: 5s wordsLoop linear infinite normal;
-  /* animation-direction: alternate; */
+.marquee-animation {
+  animation: 10s wordsLoop linear infinite;
 }
 
 @keyframes wordsLoop {
   0% {
     transform: translateX(0px);
-    -webkit-transform: translateX(0px);
   }
   100% {
-    transform: translateX(-100%);
-    -webkit-transform: translateX(-100%);
+    transform: translateX(-80%);
   }
 }
 
@@ -137,7 +136,7 @@ body {
   height: 20px;
 }
 
-#songName {
+#songTitle {
   font-size: 15px;
   color: rgb(3, 3, 3);
 }

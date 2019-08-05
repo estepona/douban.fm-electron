@@ -2,8 +2,8 @@ const electron = require('electron');
 const { ipcRenderer } = electron;
 
 const video = document.querySelector('#video');
-const songName = document.querySelector('#songName');
-const songArtist = document.querySelector('#songArtist');
+const songTitle = document.querySelector('#songTitle');
+const songArtistAlbum = document.querySelector('#songArtistAlbum');
 const pausePlayButton = document.querySelector('#pausePlayButton');
 const nextButton = document.querySelector('#nextButton');
 const likeButton = document.querySelector('#likeButton');
@@ -105,9 +105,20 @@ video.addEventListener('ended', e => {
 ipcRenderer.on('main:receiveNextSong', (event, val) => {
   currentSong = val;
 
-  songName.innerHTML = val.title;
-  songArtist.innerHTML = val.artist;
+  songTitle.innerHTML = val.title;
+  songArtistAlbum.innerHTML = `${val.artist}: ${val.albumtitle}`;
   video.src = val.url;
+
+  if (songTitle.scrollWidth > 155) {
+    songTitle.classList.add('marquee-animation');
+  } else {
+    songTitle.classList.remove('marquee-animation');
+  }
+  if (songArtistAlbum.scrollWidth > 155) {
+    songArtistAlbum.classList.add('marquee-animation');
+  } else {
+    songArtistAlbum.classList.remove('marquee-animation');
+  }
 });
 
 // TODO: add length text

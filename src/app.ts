@@ -243,7 +243,7 @@ ipcMain.on('main:getNextSong', async (event: Event, val: Song | null) => {
     song = await apiClient.getDoubanSelectedSong(true);
   }
 
-  console.log(`prev: ${val && val.title}, next: song && song.title`);
+  console.log(`prev: ${val && val.title}, next: ${song && song.title}`);
 
   event.sender.send('main:receiveNextSong', song);
 });
