@@ -21,13 +21,14 @@
 - options - refresh
 - loading default text
 - set up vscode debugger
-- about page
+- ~~time update~~
+- ~~about page~~
 - sponsor page
 - 各种快捷键
 - 各种快捷键单独放到constant里
 - ~~图标~~
 - ~~播放图标和文字距离远点儿~~
-- 艺术家文字小点儿
+- ~~艺术家文字小点儿~~
 - 鼠标移到时间整个窗口变成进度条
 - style button
 - english support
@@ -38,7 +39,7 @@
 - redheart -> liked
 - mac上显示icon和title有问题
 - 置顶快捷键不管用
-- 滚动长度的界定应该从css里拿到width，而不是hardcode 155
+- 不能有各种选择文字
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

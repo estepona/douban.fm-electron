@@ -119,7 +119,7 @@ body {
 }
 
 .marquee-animation {
-  animation: 10s wordsLoop linear infinite;
+  animation: 15s wordsLoop linear infinite;
 }
 
 @keyframes wordsLoop {
@@ -127,7 +127,7 @@ body {
     transform: translateX(0px);
   }
   100% {
-    transform: translateX(-80%);
+    transform: translateX(-100%);
   }
 }
 

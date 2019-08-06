@@ -2,14 +2,19 @@ const electron = require('electron');
 const { ipcRenderer } = electron;
 
 const video = document.querySelector('#video');
+
 const songTitle = document.querySelector('#songTitle');
 const songArtistAlbum = document.querySelector('#songArtistAlbum');
+const songTime = document.querySelector('#songTime');
+
 const pausePlayButton = document.querySelector('#pausePlayButton');
 const nextButton = document.querySelector('#nextButton');
 const likeButton = document.querySelector('#likeButton');
 
 let paused = false;
 let currentSong = null;
+let songLength = 0;
+let songLengthFormatted = '';
 
 /**
  * pausePlayButton event listeners
@@ -99,16 +104,28 @@ video.addEventListener('ended', e => {
   pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
 });
 
+video.addEventListener('timeupdate', e => {
+  e.preventDefault();
+
+  if (songLength) {
+    const curMin = String(Math.floor(video.currentTime / 60)).padStart(2, '0');
+    const curSec = String(Math.floor(video.currentTime % 60)).padStart(2, '0');
+    songTime.innerHTML = `${curMin}:${curSec} / ${songLengthFormatted}`;
+  }
+});
+
 /**
  * ipc
  */
 ipcRenderer.on('main:receiveNextSong', (event, val) => {
   currentSong = val;
 
+  // update songTitle, songArtistAlbum, vidro's src
   songTitle.innerHTML = val.title;
   songArtistAlbum.innerHTML = `${val.artist}: ${val.albumtitle}`;
   video.src = val.url;
 
+  // add marquee animation if songTitle/songArtistAlbum exceeds container width
   if (songTitle.scrollWidth > 155) {
     songTitle.classList.add('marquee-animation');
   } else {
@@ -119,8 +136,15 @@ ipcRenderer.on('main:receiveNextSong', (event, val) => {
   } else {
     songArtistAlbum.classList.remove('marquee-animation');
   }
+
+  // get song's length and format
+  songLength = val.length;
+  if (!songLength) {
+    songLengthFormatted = '';
+    songTime.innerHTML = '';
+  } else {
+    const lenMin = String(Math.floor(songLength / 60)).padStart(2, '0');
+    const lenSec = String(Math.floor(songLength % 60)).padStart(2, '0');
+    songLengthFormatted = `${lenMin}:${lenSec}`;
+  }
 });
-
-// TODO: add length text
-
-// TODO: move according to current time
