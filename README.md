@@ -36,10 +36,13 @@
 - ~~登录成功自动3S后关闭，文字在消息里~~
 - 安装
 - 更新版本
-- redheart -> liked
+- ~~redheart -> liked~~
+- shuffle liked songs
 - mac上显示icon和title有问题
 - 置顶快捷键不管用
 - 不能有各种选择文字
+- 每首歌有channel信息
+- axios wrap all requests with headers
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

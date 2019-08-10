@@ -80,8 +80,8 @@ class ApiClient {
     return playlist.song[0];
   }
 
-  public async getRedheartSongs() {
-    const redheart = await Axios.post('https://api.douban.com/v2/fm/redheart/basic', null, {
+  public async getLikedSongs() {
+    const liked = await Axios.post('https://api.douban.com/v2/fm/redheart/basic', null, {
       headers: this.headers,
     }).then(res => {
       if (res.status !== 200) {
@@ -90,10 +90,12 @@ class ApiClient {
       return res.data;
     });
 
-    // TODO: if not logged in, show warning message; from 'update_time'
-    return redheart;
+    return liked;
   }
 
+  /**
+   * get songs with specific songId(s)
+   */
   public async getSongs(songIds: SongId[]) {
     const songs: Song[] = await Axios.post(`https://api.douban.com/v2/fm/songs?sids=${songIds.join('|')}`, null, {
       headers: this.headers,

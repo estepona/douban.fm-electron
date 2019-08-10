@@ -23,7 +23,7 @@ const createMainWindow = async () => {
   if (authInfo) {
     apiClient.setAccessToken(authInfo.access_token);
 
-    const redheartSongs = await apiClient.getRedheartSongs();
+    const redheartSongs = await apiClient.getLikedSongs();
     if (!redheartSongs) {
       authInfo = null;
     }
