@@ -6,4 +6,20 @@ declare interface Playlist {
   song: Song[];
 }
 
-// TODO: redheart
+declare interface LikedSong {
+  update_time: Timestamp;
+  canonical_id: string;
+  like: Liked;
+  playable: boolean;
+  sid: SongId;
+}
+
+declare interface LikedSongs {
+  title: '我的红心歌曲';
+  updated_time: string;
+  is_collected: boolean;
+  can_play: boolean;
+  type: number;
+  id: number;
+  songs: LikedSong[];
+}

@@ -11,8 +11,9 @@ const pausePlayButton = document.querySelector('#pausePlayButton');
 const nextButton = document.querySelector('#nextButton');
 const likeButton = document.querySelector('#likeButton');
 
+let playerState = null;
+
 let paused = false;
-let currentSong = null;
 let songLength = 0;
 let songLengthFormatted = '';
 
@@ -60,7 +61,7 @@ nextButton.addEventListener('mouseout', e => {
 
 nextButton.addEventListener('click', e => {
   e.preventDefault();
-  ipcRenderer.send('main:getNextSong', currentSong);
+  ipcRenderer.send('main:getNextSong', playerState);
 
   paused = false;
   pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
@@ -98,7 +99,7 @@ moreButton.addEventListener('click', e => {
  */
 video.addEventListener('ended', e => {
   e.preventDefault();
-  ipcRenderer.send('main:getNextSong', currentSong);
+  ipcRenderer.send('main:getNextSong', playerState);
 
   paused = false;
   pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
@@ -118,12 +119,12 @@ video.addEventListener('timeupdate', e => {
  * ipc
  */
 ipcRenderer.on('main:receiveNextSong', (event, val) => {
-  currentSong = val;
+  playerState = val;
 
   // update songTitle, songArtistAlbum, vidro's src
-  songTitle.innerHTML = val.title;
-  songArtistAlbum.innerHTML = `${val.artist}: ${val.albumtitle}`;
-  video.src = val.url;
+  songTitle.innerHTML = val.song.title;
+  songArtistAlbum.innerHTML = `${val.song.artist}: ${val.song.albumtitle}`;
+  video.src = val.song.url;
 
   // add marquee animation if songTitle/songArtistAlbum exceeds container width
   if (songTitle.scrollWidth > 155) {
@@ -138,7 +139,7 @@ ipcRenderer.on('main:receiveNextSong', (event, val) => {
   }
 
   // get song's length and format
-  songLength = val.length;
+  songLength = val.song.length;
   if (!songLength) {
     songLengthFormatted = '';
     songTime.innerHTML = '';

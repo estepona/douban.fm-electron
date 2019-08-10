@@ -19,12 +19,15 @@ const appIconPath = path.join(__dirname, '..', 'src', 'asset', 'icon', 'doubanfm
 const mainHtmlPath = path.join(__dirname, '..', 'src', 'window', 'main', 'main.html');
 const loginHtmlPath = path.join(__dirname, '..', 'src', 'window', 'login', 'login.html');
 
+let likedSongs: LikedSongs | null = null;
+let likedSongsShuffled = false;
+
 const createMainWindow = async () => {
   if (authInfo) {
     apiClient.setAccessToken(authInfo.access_token);
 
-    const redheartSongs = await apiClient.getLikedSongs();
-    if (!redheartSongs) {
+    likedSongs = await apiClient.getLikedSongs();
+    if (!likedSongs) {
       authInfo = null;
     }
   }
@@ -132,6 +135,18 @@ optionMenu.append(
       },
       {
         label: '红心',
+        submenu: [
+          {
+            label: '顺序',
+            type: 'checkbox',
+            checked: false,
+          },
+          {
+            label: '随机',
+            type: 'checkbox',
+            checked: false,
+          },
+        ],
       },
     ],
   }),
@@ -232,20 +247,53 @@ ipcMain.on('login:close', () => {
   }
 });
 
-ipcMain.on('main:getNextSong', async (event: Event, val: Song | null) => {
+ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => {
+  let channel: ChannelId | null = null;
   let song: Song | null = null;
 
-  if (val && val.sid) {
-    song = await apiClient.getDoubanSelectedSong(false, val.sid);
+  if (!val) {
+    channel = -10;
+  } else if (val.channel === 'liked') {
+    channel = null;
+  } else {
+    channel = val.channel;
   }
 
-  while (!song) {
-    song = await apiClient.getDoubanSelectedSong(true);
+  // liked songs
+  if (!channel) {
+    if (!likedSongs) {
+      likedSongs = await apiClient.getLikedSongs();
+    }
+
+    if (!likedSongs) {
+      while (!song) {
+        song = await apiClient.getDoubanSelectedSong(true);
+      }
+
+      event.sender.send('main:receiveNextSong', {
+        channel,
+        song,
+      });
+    }
   }
 
-  console.log(`prev: ${val && val.title}, next: ${song && song.title}`);
+  // channel songs
+  if (channel) {
+    if (val && val.song && val.song.sid) {
+      song = await apiClient.getChannelSong(channel, false, val.song.sid);
+    }
 
-  event.sender.send('main:receiveNextSong', song);
+    while (!song) {
+      song = await apiClient.getChannelSong(channel, true);
+    }
+
+    event.sender.send('main:receiveNextSong', {
+      channel,
+      song,
+    });
+  }
+
+  console.log(`prev: ${val && val.song && val.song.title}, next: ${song && song.title}`);
 });
 
 ipcMain.on('main:openOptionMenu', (event: Event) => {
@@ -267,7 +315,13 @@ app.on('ready', async () => {
   }
 
   console.log(`new song: ${song.title}`);
-  mainWindow && mainWindow.webContents.send('main:receiveNextSong', song);
+
+  if (mainWindow) {
+    mainWindow.webContents.send('main:receiveNextSong', {
+      channel: -10,
+      song: song,
+    });
+  }
 });
 
 app.on('activate', async () => {

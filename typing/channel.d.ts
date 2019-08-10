@@ -5,7 +5,7 @@ declare interface ChannelCreator {
 }
 
 declare interface Channel {
-  id: number;
+  id: ChannelId;
   name: string;
   intro: string;
   creator: ChannelCreator;

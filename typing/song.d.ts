@@ -32,6 +32,7 @@ declare interface Song {
   singers: Artist[];
   artist: string;
   is_royal: boolean;
+  like: Liked;
   // resource url
   url: Url;
   // length in seconds

@@ -45,7 +45,7 @@ class ApiClient {
   }
 
   /**
-   * check with cache
+   * TODO: check with cache
    */
   public async checkLoggedin() {
     return;
@@ -59,9 +59,9 @@ class ApiClient {
     return channels;
   }
 
-  public async getDoubanSelectedSong(isNew: boolean, nextSid?: SongId): Promise<Song> {
+  public async getChannelSong(channelId: ChannelId, isNew: boolean, nextSid?: SongId): Promise<Song> {
     const params = {
-      channel: -10,
+      channel: channelId,
       app_name: 'radio_website',
       client: 's:mainsite|y:3.0',
       version: 100,
@@ -80,8 +80,12 @@ class ApiClient {
     return playlist.song[0];
   }
 
-  public async getLikedSongs() {
-    const liked = await Axios.post('https://api.douban.com/v2/fm/redheart/basic', null, {
+  public async getDoubanSelectedSong(isNew: boolean, nextSid?: SongId): Promise<Song> {
+    return this.getChannelSong(-10, isNew, nextSid);
+  }
+
+  public async getLikedSongs(): Promise<LikedSongs | null> {
+    const liked: LikedSongs = await Axios.post('https://api.douban.com/v2/fm/redheart/basic', null, {
       headers: this.headers,
     }).then(res => {
       if (res.status !== 200) {
