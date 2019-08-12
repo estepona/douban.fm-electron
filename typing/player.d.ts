@@ -1,5 +1,5 @@
 declare interface PlayerState {
   channel: ChannelId | 'liked';
-  song: Song;
+  song?: Song;
   shuffle_liked?: boolean;
 }

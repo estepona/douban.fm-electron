@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell } from 'electron';
+import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell, ipcRenderer } from 'electron';
 import * as path from 'path';
 
 import apiClient from './api/apiClient';
@@ -140,11 +140,25 @@ optionMenu.append(
             label: '顺序',
             type: 'checkbox',
             checked: false,
+            click: () => {
+              // 我的 -> 红心 -> 顺序
+              optionMenu.items[3].submenu.items[1].submenu.items[0].checked = true;
+
+              if (mainWindow) {
+                // TODO: can't run ipc in main process, should just call functions
+                mainWindow.webContents.send('main:getNextSong', {
+                  channel: 'liked',
+                });
+
+                console.log('xcvsdfs');
+              }
+            },
           },
           {
             label: '随机',
             type: 'checkbox',
             checked: false,
+            // TODO: click
           },
         ],
       },
@@ -159,6 +173,17 @@ optionMenu.append(
         label: '豆瓣精选',
         type: 'checkbox',
         checked: true,
+        click: () => {
+          // 兆赫 -> 豆瓣精选
+          optionMenu.items[4].submenu.items[0].checked = true;
+
+          if (mainWindow) {
+            // TODO: can't run ipc in main process, should just call functions
+            mainWindow.webContents.send('main:getNextSong', {
+              channel: -10,
+            });
+          }
+        },
       },
     ],
   }),
@@ -251,6 +276,7 @@ ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => 
   let channel: ChannelId | null = null;
   let song: Song | null = null;
 
+  // determine channel
   if (!val) {
     channel = -10;
   } else if (val.channel === 'liked') {
@@ -265,15 +291,25 @@ ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => 
       likedSongs = await apiClient.getLikedSongs();
     }
 
-    if (!likedSongs) {
-      while (!song) {
-        song = await apiClient.getDoubanSelectedSong(true);
-      }
+    if (likedSongs && val && val.song && val.song.sid) {
+      console.log(likedSongs.songs.length, 'xxx');
 
-      event.sender.send('main:receiveNextSong', {
-        channel,
-        song,
-      });
+      const nextLikedSongIdx = likedSongs.songs.findIndex(s => val.song && s.sid === val.song.sid);
+      const nextLikedSongShort =
+        nextLikedSongIdx < likedSongs.songs.length - 1 ? likedSongs.songs[nextLikedSongIdx + 1] : null;
+
+      if (nextLikedSongShort) {
+        while (!song) {
+          const songs = await apiClient.getSongs([nextLikedSongShort.sid]);
+          song = songs[0];
+        }
+      }
+    } else if (likedSongs) {
+      console.log(likedSongs.songs.length, 'xxx');
+      while (!song) {
+        const songs = await apiClient.getSongs([likedSongs.songs[0].sid]);
+        song = songs[0];
+      }
     }
   }
 
@@ -286,14 +322,14 @@ ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => 
     while (!song) {
       song = await apiClient.getChannelSong(channel, true);
     }
-
-    event.sender.send('main:receiveNextSong', {
-      channel,
-      song,
-    });
   }
 
   console.log(`prev: ${val && val.song && val.song.title}, next: ${song && song.title}`);
+
+  event.sender.send('main:receiveNextSong', {
+    channel,
+    song,
+  });
 });
 
 ipcMain.on('main:openOptionMenu', (event: Event) => {
@@ -319,7 +355,7 @@ app.on('ready', async () => {
   if (mainWindow) {
     mainWindow.webContents.send('main:receiveNextSong', {
       channel: -10,
-      song: song,
+      song,
     });
   }
 });

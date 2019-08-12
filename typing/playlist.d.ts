@@ -6,14 +6,6 @@ declare interface Playlist {
   song: Song[];
 }
 
-declare interface LikedSong {
-  update_time: Timestamp;
-  canonical_id: string;
-  like: Liked;
-  playable: boolean;
-  sid: SongId;
-}
-
 declare interface LikedSongs {
   title: '我的红心歌曲';
   updated_time: string;

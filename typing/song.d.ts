@@ -53,3 +53,11 @@ declare interface Song {
   // <kbps, unknown number>
   available_formats: Record<string, number>;
 }
+
+declare interface LikedSong {
+  update_time: Timestamp;
+  canonical_id: string;
+  like: Liked;
+  playable: boolean;
+  sid: SongId;
+}

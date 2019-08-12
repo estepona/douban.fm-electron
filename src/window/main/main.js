@@ -14,6 +14,7 @@ const likeButton = document.querySelector('#likeButton');
 let playerState = null;
 
 let paused = false;
+let liked = false;
 let songLength = 0;
 let songLengthFormatted = '';
 
@@ -71,11 +72,15 @@ nextButton.addEventListener('click', e => {
  * likeButton event listeners
  */
 likeButton.addEventListener('mouseover', e => {
-  likeButton.src = '../../asset/icon/like-button-black.svg';
+  if (!liked) {
+    likeButton.src = '../../asset/icon/like-button-black.svg';
+  }
 });
 
 likeButton.addEventListener('mouseout', e => {
-  likeButton.src = '../../asset/icon/like-button-white.svg';
+  if (!liked) {
+    likeButton.src = '../../asset/icon/like-button-white.svg';
+  }
 });
 
 /**
@@ -121,10 +126,17 @@ video.addEventListener('timeupdate', e => {
 ipcRenderer.on('main:receiveNextSong', (event, val) => {
   playerState = val;
 
-  // update songTitle, songArtistAlbum, vidro's src
+  // update songTitle, songArtistAlbum, vidro's src, likeButton
   songTitle.innerHTML = val.song.title;
   songArtistAlbum.innerHTML = `${val.song.artist}: ${val.song.albumtitle}`;
   video.src = val.song.url;
+  if (val.song.like === 1) {
+    likeButton.src = '../../asset/icon/like-button-red.svg';
+    liked = true;
+  } else {
+    likeButton.src = '../../asset/icon/like-button-white.svg';
+    liked = false;
+  }
 
   // add marquee animation if songTitle/songArtistAlbum exceeds container width
   if (songTitle.scrollWidth > 155) {
