@@ -1,7 +1,8 @@
-import * as dotenv from 'dotenv';
-import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell, ipcRenderer } from 'electron';
 import * as path from 'path';
+import * as dotenv from 'dotenv';
 import * as _ from 'lodash';
+import Mousetrap from 'mousetrap';
+import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell, ipcRenderer } from 'electron';
 
 import apiClient from './api/apiClient';
 import { getNextSong } from './ipc/main';
@@ -22,7 +23,6 @@ const mainHtmlPath = path.join(__dirname, '..', 'src', 'window', 'main', 'main.h
 const loginHtmlPath = path.join(__dirname, '..', 'src', 'window', 'login', 'login.html');
 
 let likedSongs: LikedSongs | null = null;
-let likedSongsShuffled = false;
 
 const createMainWindow = async () => {
   if (authInfo) {
@@ -284,6 +284,9 @@ optionMenu.append(
   }),
 );
 
+// try mousetrap
+Mousetrap.bind('4', () => optionMenu.items[10].click());
+
 /**
  * ipc
  */
@@ -313,59 +316,6 @@ ipcMain.on('login:close', () => {
 });
 
 ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => {
-  // let channel: ChannelId | null = null;
-  // let song: Song | null = null;
-
-  // // determine channel
-  // if (!val) {
-  //   channel = -10;
-  // } else if (val.channel === 'liked') {
-  //   channel = null;
-  // } else {
-  //   channel = val.channel;
-  // }
-
-  // // liked songs
-  // if (!channel) {
-  //   if (!likedSongs) {
-  //     likedSongs = await apiClient.getLikedSongs();
-  //   }
-
-  //   if (likedSongs && val && val.song && val.song.sid) {
-  //     console.log(likedSongs.songs.length, 'xxx');
-
-  //     const nextLikedSongIdx = likedSongs.songs.findIndex(s => val.song && s.sid === val.song.sid);
-  //     const nextLikedSongShort =
-  //       nextLikedSongIdx < likedSongs.songs.length - 1 ? likedSongs.songs[nextLikedSongIdx + 1] : null;
-
-  //     if (nextLikedSongShort) {
-  //       while (!song) {
-  //         const songs = await apiClient.getSongs([nextLikedSongShort.sid]);
-  //         song = songs[0];
-  //       }
-  //     }
-  //   } else if (likedSongs) {
-  //     console.log(likedSongs.songs.length, 'xxx');
-  //     while (!song) {
-  //       const songs = await apiClient.getSongs([likedSongs.songs[0].sid]);
-  //       song = songs[0];
-  //     }
-  //   }
-  // }
-
-  // // channel songs
-  // if (channel) {
-  //   if (val && val.song && val.song.sid) {
-  //     song = await apiClient.getChannelSong(channel, false, val.song.sid);
-  //   }
-
-  //   while (!song) {
-  //     song = await apiClient.getChannelSong(channel, true);
-  //   }
-  // }
-
-  // console.log(`prev: ${val && val.song && val.song.title}, next: ${song && song.title}`);
-
   if (val && val.channel === 'liked') {
     likedSongs = await apiClient.getLikedSongs();
   }

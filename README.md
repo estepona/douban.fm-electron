@@ -37,7 +37,7 @@
 - 安装
 - 更新版本
 - ~~redheart -> liked~~
-- shuffle liked songs
+- ~~shuffle liked songs~~
 - mac上显示icon和title有问题
 - 置顶快捷键不管用
 - 不能有各种选择文字

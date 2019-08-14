@@ -33,8 +33,6 @@ export const getNextSong = async (ps: PlayerState | null, ls?: LikedSongs | null
         }
       }
     } else if (ls) {
-      console.log(ls.songs.length, 'xxx');
-
       while (!song) {
         const songs = await apiClient.getSongs([ls.songs[0].sid]);
         song = songs[0];
@@ -53,7 +51,7 @@ export const getNextSong = async (ps: PlayerState | null, ls?: LikedSongs | null
     }
   }
 
-  console.log(`prev: ${ps && ps.song && ps.song.title}, next: ${song && song.like}`);
+  console.log(`prev: ${ps && ps.song && ps.song.title}, next: ${song && song.title}`);
 
   return {
     channel,
