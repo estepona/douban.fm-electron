@@ -1,28 +1,30 @@
-export const getNextSong = async (event: Event, val: PlayerState | null) => {
-  let channel: ChannelId | null = null;
+import apiClient from '../api/apiClient';
+
+export const getNextSong = async (ps: PlayerState | null, ls?: LikedSongs | null): Promise<PlayerState> => {
+  let channel: ChannelId | 'liked' | null = null;
   let song: Song | null = null;
+  ls = ls || null;
 
   // determine channel
-  if (!val) {
+  if (!ps) {
     channel = -10;
-  } else if (val.channel === 'liked') {
-    channel = null;
+  } else if (ps.channel === 'liked') {
+    channel = 'liked';
   } else {
-    channel = val.channel;
+    channel = ps.channel;
   }
 
   // liked songs
-  if (!channel) {
-    if (!likedSongs) {
-      likedSongs = await apiClient.getLikedSongs();
+  if (channel === 'liked') {
+    if (!ls) {
+      ls = await apiClient.getLikedSongs();
     }
 
-    if (likedSongs && val && val.song && val.song.sid) {
-      console.log(likedSongs.songs.length, 'xxx');
+    if (ls && ps && ps.song && ps.song.sid) {
+      console.log(ls.songs.length, 'xxx');
 
-      const nextLikedSongIdx = likedSongs.songs.findIndex(s => val.song && s.sid === val.song.sid);
-      const nextLikedSongShort =
-        nextLikedSongIdx < likedSongs.songs.length - 1 ? likedSongs.songs[nextLikedSongIdx + 1] : null;
+      const nextLikedSongIdx = ls.songs.findIndex(s => ps.song && s.sid === ps.song.sid);
+      const nextLikedSongShort = nextLikedSongIdx < ls.songs.length - 1 ? ls.songs[nextLikedSongIdx + 1] : null;
 
       if (nextLikedSongShort) {
         while (!song) {
@@ -30,19 +32,20 @@ export const getNextSong = async (event: Event, val: PlayerState | null) => {
           song = songs[0];
         }
       }
-    } else if (likedSongs) {
-      console.log(likedSongs.songs.length, 'xxx');
+    } else if (ls) {
+      console.log(ls.songs.length, 'xxx');
+
       while (!song) {
-        const songs = await apiClient.getSongs([likedSongs.songs[0].sid]);
+        const songs = await apiClient.getSongs([ls.songs[0].sid]);
         song = songs[0];
       }
     }
   }
 
   // channel songs
-  if (channel) {
-    if (val && val.song && val.song.sid) {
-      song = await apiClient.getChannelSong(channel, false, val.song.sid);
+  if (channel !== 'liked') {
+    if (ps && ps.song && ps.song.sid) {
+      song = await apiClient.getChannelSong(channel, false, ps.song.sid);
     }
 
     while (!song) {
@@ -50,10 +53,10 @@ export const getNextSong = async (event: Event, val: PlayerState | null) => {
     }
   }
 
-  console.log(`prev: ${val && val.song && val.song.title}, next: ${song && song.title}`);
+  console.log(`prev: ${ps && ps.song && ps.song.title}, next: ${song && song.like}`);
 
-  event.sender.send('main:receiveNextSong', {
+  return {
     channel,
-    song,
-  });
-});
+    song: song || undefined,
+  };
+};

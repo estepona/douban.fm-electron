@@ -130,7 +130,7 @@ ipcRenderer.on('main:receiveNextSong', (event, val) => {
   songTitle.innerHTML = val.song.title;
   songArtistAlbum.innerHTML = `${val.song.artist}: ${val.song.albumtitle}`;
   video.src = val.song.url;
-  if (val.song.like === 1) {
+  if (val.song.like === 1 || val.channel === 'liked') {
     likeButton.src = '../../asset/icon/like-button-red.svg';
     liked = true;
   } else {

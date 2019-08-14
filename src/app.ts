@@ -3,6 +3,7 @@ import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell, ipcR
 import * as path from 'path';
 
 import apiClient from './api/apiClient';
+import { getNextSong } from './ipc/main';
 import { readAuth, writeAuth, resetAuth } from './util/auth';
 
 dotenv.config();
@@ -140,17 +141,27 @@ optionMenu.append(
             label: '顺序',
             type: 'checkbox',
             checked: false,
-            click: () => {
-              // 我的 -> 红心 -> 顺序
-              optionMenu.items[3].submenu.items[1].submenu.items[0].checked = true;
-
+            click: async () => {
               if (mainWindow) {
-                // TODO: can't run ipc in main process, should just call functions
-                mainWindow.webContents.send('main:getNextSong', {
-                  channel: 'liked',
-                });
+                if (!likedSongs) {
+                  likedSongs = await apiClient.getLikedSongs();
+                }
 
-                console.log('xcvsdfs');
+                const playerState = await getNextSong(
+                  {
+                    channel: 'liked',
+                  },
+                  likedSongs,
+                );
+
+                mainWindow.webContents.send('main:receiveNextSong', playerState);
+
+                // 我的 -> 红心 -> 顺序
+                optionMenu.items[3].submenu.items[1].submenu.items[0].checked = true;
+                // 我的 -> 红心 -> 随机
+                optionMenu.items[3].submenu.items[1].submenu.items[1].checked = false;
+                // 我的 -> 兆赫 -> 豆瓣精选
+                optionMenu.items[4].submenu.items[0].checked = false;
               }
             },
           },
@@ -173,15 +184,20 @@ optionMenu.append(
         label: '豆瓣精选',
         type: 'checkbox',
         checked: true,
-        click: () => {
+        click: async () => {
           // 兆赫 -> 豆瓣精选
           optionMenu.items[4].submenu.items[0].checked = true;
 
           if (mainWindow) {
-            // TODO: can't run ipc in main process, should just call functions
-            mainWindow.webContents.send('main:getNextSong', {
+            mainWindow.webContents.send('main:receiveNextSong', {
               channel: -10,
+              song: await apiClient.getDoubanSelectedSong(true),
             });
+
+            // 我的 -> 红心
+            optionMenu.items[3].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+            // 我的 -> 兆赫 -> 豆瓣精选
+            optionMenu.items[4].submenu.items[0].checked = true;
           }
         },
       },
@@ -273,63 +289,66 @@ ipcMain.on('login:close', () => {
 });
 
 ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => {
-  let channel: ChannelId | null = null;
-  let song: Song | null = null;
+  // let channel: ChannelId | null = null;
+  // let song: Song | null = null;
 
-  // determine channel
-  if (!val) {
-    channel = -10;
-  } else if (val.channel === 'liked') {
-    channel = null;
-  } else {
-    channel = val.channel;
+  // // determine channel
+  // if (!val) {
+  //   channel = -10;
+  // } else if (val.channel === 'liked') {
+  //   channel = null;
+  // } else {
+  //   channel = val.channel;
+  // }
+
+  // // liked songs
+  // if (!channel) {
+  //   if (!likedSongs) {
+  //     likedSongs = await apiClient.getLikedSongs();
+  //   }
+
+  //   if (likedSongs && val && val.song && val.song.sid) {
+  //     console.log(likedSongs.songs.length, 'xxx');
+
+  //     const nextLikedSongIdx = likedSongs.songs.findIndex(s => val.song && s.sid === val.song.sid);
+  //     const nextLikedSongShort =
+  //       nextLikedSongIdx < likedSongs.songs.length - 1 ? likedSongs.songs[nextLikedSongIdx + 1] : null;
+
+  //     if (nextLikedSongShort) {
+  //       while (!song) {
+  //         const songs = await apiClient.getSongs([nextLikedSongShort.sid]);
+  //         song = songs[0];
+  //       }
+  //     }
+  //   } else if (likedSongs) {
+  //     console.log(likedSongs.songs.length, 'xxx');
+  //     while (!song) {
+  //       const songs = await apiClient.getSongs([likedSongs.songs[0].sid]);
+  //       song = songs[0];
+  //     }
+  //   }
+  // }
+
+  // // channel songs
+  // if (channel) {
+  //   if (val && val.song && val.song.sid) {
+  //     song = await apiClient.getChannelSong(channel, false, val.song.sid);
+  //   }
+
+  //   while (!song) {
+  //     song = await apiClient.getChannelSong(channel, true);
+  //   }
+  // }
+
+  // console.log(`prev: ${val && val.song && val.song.title}, next: ${song && song.title}`);
+
+  if (val && val.channel === 'liked') {
+    likedSongs = await apiClient.getLikedSongs();
   }
 
-  // liked songs
-  if (!channel) {
-    if (!likedSongs) {
-      likedSongs = await apiClient.getLikedSongs();
-    }
+  const playerState = await getNextSong(val, likedSongs);
 
-    if (likedSongs && val && val.song && val.song.sid) {
-      console.log(likedSongs.songs.length, 'xxx');
-
-      const nextLikedSongIdx = likedSongs.songs.findIndex(s => val.song && s.sid === val.song.sid);
-      const nextLikedSongShort =
-        nextLikedSongIdx < likedSongs.songs.length - 1 ? likedSongs.songs[nextLikedSongIdx + 1] : null;
-
-      if (nextLikedSongShort) {
-        while (!song) {
-          const songs = await apiClient.getSongs([nextLikedSongShort.sid]);
-          song = songs[0];
-        }
-      }
-    } else if (likedSongs) {
-      console.log(likedSongs.songs.length, 'xxx');
-      while (!song) {
-        const songs = await apiClient.getSongs([likedSongs.songs[0].sid]);
-        song = songs[0];
-      }
-    }
-  }
-
-  // channel songs
-  if (channel) {
-    if (val && val.song && val.song.sid) {
-      song = await apiClient.getChannelSong(channel, false, val.song.sid);
-    }
-
-    while (!song) {
-      song = await apiClient.getChannelSong(channel, true);
-    }
-  }
-
-  console.log(`prev: ${val && val.song && val.song.title}, next: ${song && song.title}`);
-
-  event.sender.send('main:receiveNextSong', {
-    channel,
-    song,
-  });
+  event.sender.send('main:receiveNextSong', playerState);
 });
 
 ipcMain.on('main:openOptionMenu', (event: Event) => {

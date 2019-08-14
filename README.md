@@ -41,13 +41,13 @@
 - mac上显示icon和title有问题
 - 置顶快捷键不管用
 - 不能有各种选择文字
-- 每首歌有channel信息
+- ~~每首歌有channel信息~~
 - axios wrap all requests with headers
 - git version hook
 - 登录后得到所有私人、红心、推荐频道
 - option menu change channel
 - like event
-- liked songs playlist
+- ~~liked songs playlist~~
 - liked songs length == 0 not show
 - 登录按钮鼠标悬在上面显示名字
 
