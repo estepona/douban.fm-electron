@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell, ipcRenderer } from 'electron';
 import * as path from 'path';
+import * as _ from 'lodash';
 
 import apiClient from './api/apiClient';
 import { getNextSong } from './ipc/main';
@@ -169,7 +170,33 @@ optionMenu.append(
             label: '随机',
             type: 'checkbox',
             checked: false,
-            // TODO: click
+            click: async () => {
+              if (mainWindow) {
+                if (!likedSongs) {
+                  likedSongs = await apiClient.getLikedSongs();
+                }
+
+                if (likedSongs) {
+                  likedSongs.songs = _.shuffle(likedSongs.songs);
+                }
+
+                const playerState = await getNextSong(
+                  {
+                    channel: 'liked',
+                  },
+                  likedSongs,
+                );
+
+                mainWindow.webContents.send('main:receiveNextSong', playerState);
+
+                // 我的 -> 红心 -> 顺序
+                optionMenu.items[3].submenu.items[1].submenu.items[0].checked = false;
+                // 我的 -> 红心 -> 随机
+                optionMenu.items[3].submenu.items[1].submenu.items[1].checked = true;
+                // 我的 -> 兆赫 -> 豆瓣精选
+                optionMenu.items[4].submenu.items[0].checked = false;
+              }
+            },
           },
         ],
       },
@@ -185,9 +212,6 @@ optionMenu.append(
         type: 'checkbox',
         checked: true,
         click: async () => {
-          // 兆赫 -> 豆瓣精选
-          optionMenu.items[4].submenu.items[0].checked = true;
-
           if (mainWindow) {
             mainWindow.webContents.send('main:receiveNextSong', {
               channel: -10,
