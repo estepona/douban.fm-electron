@@ -16,6 +16,7 @@
 - ~~frameless~~
 - ~~option icon~~
 - ~~所有options放到一个options的图标里~~
+- 鼠标在mac上会有不同的形态，应该什么都没有，或者按钮是pointer
 - option menu style
 - ~~音乐结束自动下一首~~
 - options - refresh
