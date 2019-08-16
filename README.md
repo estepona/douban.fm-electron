@@ -25,7 +25,8 @@
 - ~~about page~~
 - sponsor page
 - 各种快捷键
-- 各种快捷键单独放到constant里
+- 鼠标移动到按键上显示快捷键
+- ~~各种快捷键单独放到constant里~~
 - ~~图标~~
 - ~~播放图标和文字距离远点儿~~
 - ~~艺术家文字小点儿~~
@@ -39,7 +40,7 @@
 - ~~redheart -> liked~~
 - ~~shuffle liked songs~~
 - mac上显示icon和title有问题
-- 置顶快捷键不管用
+- ~~置顶快捷键不管用~~
 - 不能有各种选择文字
 - ~~每首歌有channel信息~~
 - axios wrap all requests with headers
@@ -50,6 +51,8 @@
 - ~~liked songs playlist~~
 - liked songs length == 0 not show
 - 登录按钮鼠标悬在上面显示名字
+- 感谢子昭和小炎
+- refactor main.js, maybe main.ts?
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

@@ -1,5 +1,9 @@
 const electron = require('electron');
+const Mousetrap = require('mousetrap');
 const { ipcRenderer } = electron;
+
+const shortcut = require('../../../dist/util/shortcut');
+const { shortcuts } = shortcut;
 
 const video = document.querySelector('#video');
 
@@ -17,6 +21,10 @@ let paused = false;
 let liked = false;
 let songLength = 0;
 let songLengthFormatted = '';
+
+Mousetrap.bind('4', () => {
+  alert(4);
+});
 
 /**
  * pausePlayButton event listeners
@@ -160,4 +168,30 @@ ipcRenderer.on('main:receiveNextSong', (event, val) => {
     const lenSec = String(Math.floor(songLength % 60)).padStart(2, '0');
     songLengthFormatted = `${lenMin}:${lenSec}`;
   }
+});
+
+/**
+ * shortcuts
+ */
+Mousetrap.bind(shortcuts.pauseOrContinue, () => {
+  if (paused) {
+    video.play();
+    paused = false;
+    pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
+  } else {
+    video.pause();
+    paused = true;
+    pausePlayButton.src = '../../asset/icon/play-button-white.svg';
+  }
+});
+
+Mousetrap.bind(shortcuts.next, () => {
+  ipcRenderer.send('main:getNextSong', playerState);
+
+  paused = false;
+  pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
+});
+
+Mousetrap.bind(shortcuts.setWindowOnTop, () => {
+  ipcRenderer.send('main:setWindowOnTop');
 });

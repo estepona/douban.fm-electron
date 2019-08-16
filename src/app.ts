@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import * as _ from 'lodash';
-import Mousetrap from 'mousetrap';
 import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell, ipcRenderer } from 'electron';
 
 import apiClient from './api/apiClient';
@@ -284,9 +283,6 @@ optionMenu.append(
   }),
 );
 
-// try mousetrap
-Mousetrap.bind('4', () => optionMenu.items[10].click());
-
 /**
  * ipc
  */
@@ -330,6 +326,10 @@ ipcMain.on('main:openOptionMenu', (event: Event) => {
   optionMenu.popup({
     window: win,
   });
+});
+
+ipcMain.on('main:setWindowOnTop', (event: Event) => {
+  optionMenu.items[10].click();
 });
 
 /**
