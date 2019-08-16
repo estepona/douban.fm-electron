@@ -54,6 +54,7 @@
 - 登录按钮鼠标悬在上面显示名字
 - 感谢子昭和小炎
 - refactor main.js, maybe main.ts?
+- Electron\[9861:463831\] *** WARNING: Textured window <AtomNSWindow: 0x7f9177c7fa10> is getting an implicitly transparent titlebar. This will break when linking against newer SDKs. Use NSWindow's -titlebarAppearsTransparent=YES instead.
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)
