@@ -21,8 +21,6 @@ export const getNextSong = async (ps: PlayerState | null, ls?: LikedSongs | null
     }
 
     if (ls && ps && ps.song && ps.song.sid) {
-      console.log(ls.songs.length, 'xxx');
-
       const nextLikedSongIdx = ls.songs.findIndex(s => ps.song && s.sid === ps.song.sid);
       const nextLikedSongShort = nextLikedSongIdx < ls.songs.length - 1 ? ls.songs[nextLikedSongIdx + 1] : null;
 
@@ -52,6 +50,7 @@ export const getNextSong = async (ps: PlayerState | null, ls?: LikedSongs | null
   }
 
   console.log(`prev: ${ps && ps.song && ps.song.title}, next: ${song && song.title}`);
+  console.log(`prev: ${ps && ps.song && ps.song.sid}, next: ${song && song.sid}`);
 
   return {
     channel,

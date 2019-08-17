@@ -22,10 +22,6 @@ let liked = false;
 let songLength = 0;
 let songLengthFormatted = '';
 
-Mousetrap.bind('4', () => {
-  alert(4);
-});
-
 /**
  * pausePlayButton event listeners
  */
@@ -80,14 +76,28 @@ nextButton.addEventListener('click', e => {
  * likeButton event listeners
  */
 likeButton.addEventListener('mouseover', e => {
-  if (!liked) {
-    likeButton.src = '../../asset/icon/like-button-black.svg';
-  }
+  likeButton.src = '../../asset/icon/like-button-black.svg';
 });
 
 likeButton.addEventListener('mouseout', e => {
-  if (!liked) {
+  if (liked) {
+    likeButton.src = '../../asset/icon/like-button-red.svg';
+  } else {
     likeButton.src = '../../asset/icon/like-button-white.svg';
+  }
+});
+
+likeButton.addEventListener('click', e => {
+  e.preventDefault();
+
+  if (liked) {
+    ipcRenderer.send('main:unlikeSong', playerState);
+    liked = false;
+    likeButton.src = '../../asset/icon/like-button-white.svg';
+  } else {
+    ipcRenderer.send('main:likeSong', playerState);
+    liked = true;
+    likeButton.src = '../../asset/icon/like-button-red.svg';
   }
 });
 

@@ -33,6 +33,8 @@ const createMainWindow = async () => {
     }
   }
 
+  await apiClient.getAndSetCookie();
+
   const primaryResoultion = screen.getPrimaryDisplay().workAreaSize;
 
   mainWindow = new BrowserWindow({
@@ -332,6 +334,20 @@ ipcMain.on('main:setWindowOnTop', (event: Event) => {
   optionMenu.items[10].click();
 });
 
+ipcMain.on('main:likeSong', async (event: Event, val: PlayerState | null) => {
+  if (val && val.song && val.song.sid) {
+    console.log(val, typeof val.song.sid);
+    await apiClient.likeSong(val.song.sid);
+  }
+});
+
+ipcMain.on('main:unlikeSong', async (event: Event, val: PlayerState | null) => {
+  if (val && val.song && val.song.sid) {
+    console.log(val, typeof val.song.sid);
+    await apiClient.unlikeSong(val.song.sid);
+  }
+});
+
 /**
  * app
  */
@@ -342,8 +358,6 @@ app.on('ready', async () => {
   while (!song) {
     song = await apiClient.getDoubanSelectedSong(true);
   }
-
-  console.log(`new song: ${song.title}`);
 
   if (mainWindow) {
     mainWindow.webContents.send('main:receiveNextSong', {

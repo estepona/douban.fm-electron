@@ -8,6 +8,15 @@ class ApiClient {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
+  /**
+   * @param cookie e.g. bid=096SAMVgyFI
+   */
+  private setCookie(cookie: string) {
+    Object.assign(this.headers, {
+      Cookie: cookie,
+    });
+  }
+
   public setAccessToken(accessToken: string) {
     Object.assign(this.headers, {
       Authorization: `Bearer ${accessToken}`,
@@ -29,6 +38,7 @@ class ApiClient {
 
     const authRes: AuthInfo = await Axios.post(`https://www.douban.com/service/auth2/token?${authQueryString}`, null, {
       headers: this.headers,
+      withCredentials: true,
     })
       .then(res => res.data)
       .catch(err => {
@@ -45,14 +55,25 @@ class ApiClient {
   }
 
   /**
-   * TODO: check with cache
+   * call rec channel api and get cookie
    */
-  public async checkLoggedin() {
-    return;
+  public async getAndSetCookie() {
+    await Axios.post('https://api.douban.com/v2/fm/rec_channels?specific=all', null, {
+      headers: this.headers,
+    }).then(res => {
+      if (res.headers['set-cookie']) {
+        try {
+          const cookie = res.headers['set-cookie'][0].split(';')[0];
+          this.setCookie(cookie);
+        } catch {
+          console.log('failed to get and set cookie');
+        }
+      }
+    });
   }
 
   public async getRecChannels(): Promise<RecChannels> {
-    const channels: RecChannels = await Axios.post('https://douban.fm/j/v2/rec_channels?specific=all', null, {
+    const channels: RecChannels = await Axios.post('https://api.douban.com/v2/fm/rec_channels?specific=all', null, {
       headers: this.headers,
     }).then(res => res.data);
 
@@ -73,7 +94,7 @@ class ApiClient {
       .map(v => v.join('='))
       .join('&');
 
-    const playlist: Playlist = await Axios.post(`https://fm.douban.com/j/v2/playlist?${paramsString}`, null, {
+    const playlist: Playlist = await Axios.get(`https://api.douban.com/v2/fm/playlist?${paramsString}`, {
       headers: this.headers,
     }).then(res => res.data);
 
@@ -100,12 +121,48 @@ class ApiClient {
   /**
    * get songs with specific songId(s)
    */
-  public async getSongs(songIds: SongId[]) {
+  public async getSongs(songIds: SongId[]): Promise<Song[]> {
     const songs: Song[] = await Axios.post(`https://api.douban.com/v2/fm/songs?sids=${songIds.join('|')}`, null, {
       headers: this.headers,
     }).then(res => res.data);
 
     return songs;
+  }
+
+  public async likeSong(songId: SongId) {
+    const params = {
+      channel: 0,
+      app_name: 'radio_website',
+      version: 100,
+      type: 'r',
+      sid: songId,
+    };
+
+    const paramsString = Object.entries(params)
+      .map(v => v.join('='))
+      .join('&');
+
+    await Axios.post(`https://api.douban.com/v2/fm/playlist?${paramsString}`, null, {
+      headers: this.headers,
+    }).then(res => res.data);
+  }
+
+  public async unlikeSong(songId: SongId) {
+    const params = {
+      channel: 0,
+      app_name: 'radio_website',
+      version: 100,
+      type: 'u',
+      sid: songId,
+    };
+
+    const paramsString = Object.entries(params)
+      .map(v => v.join('='))
+      .join('&');
+
+    await Axios.post(`https://api.douban.com/v2/fm/playlist?${paramsString}`, null, {
+      headers: this.headers,
+    }).then(res => res.data);
   }
 
   public async downloadSong() {
