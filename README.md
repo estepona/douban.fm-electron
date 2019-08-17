@@ -52,7 +52,7 @@
 - ~~liked songs playlist~~
 - liked songs length == 0 not show
 - 登录按钮鼠标悬在上面显示名字
-- 感谢子昭和小炎
+- ~~感谢子昭和小炎~~
 - refactor main.js, maybe main.ts?
 - Electron\[9861:463831\] *** WARNING: Textured window <AtomNSWindow: 0x7f9177c7fa10> is getting an implicitly transparent titlebar. This will break when linking against newer SDKs. Use NSWindow's -titlebarAppearsTransparent=YES instead.
 - ~~full sid requires cookie in headers~~
@@ -62,6 +62,13 @@
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)
 - [豆瓣电台api](https://blog.csdn.net/hello2me/article/details/42078317)
 - [各种音乐平台API整理 | Music APIs](https://www.fangr.cc/2018/01/22/music-apis-md.html#%E8%B1%86%E7%93%A3FM)
+
+## Author
+[Binghuan Zhang](https://github.com/estepona)
+
+## Contributors
+- [Zizhao Wang](https://github.com/MikuZZZ)
+- Xiaoyan Wang]
 
 ## Credit
 <div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
