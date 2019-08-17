@@ -92,10 +92,12 @@ likeButton.addEventListener('click', e => {
 
   if (liked) {
     ipcRenderer.send('main:unlikeSong', playerState);
+
     liked = false;
     likeButton.src = '../../asset/icon/like-button-white.svg';
   } else {
     ipcRenderer.send('main:likeSong', playerState);
+
     liked = true;
     likeButton.src = '../../asset/icon/like-button-red.svg';
   }
@@ -200,6 +202,24 @@ Mousetrap.bind(shortcuts.next, () => {
 
   paused = false;
   pausePlayButton.src = '../../asset/icon/pause-button-white.svg';
+});
+
+Mousetrap.bind(shortcuts.like, () => {
+  if (!liked) {
+    ipcRenderer.send('main:likeSong', playerState);
+
+    liked = true;
+    likeButton.src = '../../asset/icon/like-button-red.svg';
+  }
+});
+
+Mousetrap.bind(shortcuts.unlike, () => {
+  if (liked) {
+    ipcRenderer.send('main:unlikeSong', playerState);
+
+    liked = false;
+    likeButton.src = '../../asset/icon/like-button-white.svg';
+  }
 });
 
 Mousetrap.bind(shortcuts.setWindowOnTop, () => {
