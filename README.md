@@ -20,7 +20,7 @@
 - ~~音乐结束自动下一首~~
 - options - refresh
 - loading default text
-- set up vscode debugger
+- ~~set up vscode debugger~~
 - ~~time update~~
 - ~~about page~~
 - sponsor page
