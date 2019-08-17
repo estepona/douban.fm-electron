@@ -7,6 +7,7 @@
     "build": "npx tsc",
     "watch": "npx tsc -w",
     "start": "npm run build && npx electron ./dist/app.js",
+    "package-win32": "npx electron-packager . --platform=win32 --out=out",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -33,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "electron": "^5.0.7",
+    "electron-packager": "^14.0.4",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",

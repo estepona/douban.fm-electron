@@ -51,6 +51,7 @@
 - ~~like event~~
 - ~~unlike event~~
 - ~~liked songs playlist~~
+- add description
 - liked songs length == 0 not show
 - 登录按钮鼠标悬在上面显示名字
 - ~~感谢子昭和小炎~~
