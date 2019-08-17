@@ -256,6 +256,17 @@ optionMenu.append(
   new MenuItem({
     label: '刷新',
     accelerator: process.platform === 'win32' ? 'F5' : 'CommandOrControl+R',
+    click: async () => {
+      if (mainWindow) {
+        const playerState = await getNextSong(null, likedSongs);
+        mainWindow.webContents.send('main:receiveNextSong', playerState);
+
+        // 我的 -> 红心
+        optionMenu.items[3].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+        // 我的 -> 兆赫 -> 豆瓣精选
+        optionMenu.items[4].submenu.items[0].checked = true;
+      }
+    },
   }),
 );
 optionMenu.append(
@@ -313,6 +324,21 @@ ipcMain.on('login:close', () => {
   }
 });
 
+ipcMain.on('main:openOptionMenu', (event: Event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  optionMenu.popup({
+    window: win,
+  });
+});
+
+ipcMain.on('main:refresh', async (event: Event) => {
+  await optionMenu.items[9].click();
+});
+
+ipcMain.on('main:setWindowOnTop', (event: Event) => {
+  optionMenu.items[10].click();
+});
+
 ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => {
   if (val && val.channel === 'liked') {
     likedSongs = await apiClient.getLikedSongs();
@@ -323,27 +349,14 @@ ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => 
   event.sender.send('main:receiveNextSong', playerState);
 });
 
-ipcMain.on('main:openOptionMenu', (event: Event) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  optionMenu.popup({
-    window: win,
-  });
-});
-
-ipcMain.on('main:setWindowOnTop', (event: Event) => {
-  optionMenu.items[10].click();
-});
-
 ipcMain.on('main:likeSong', async (event: Event, val: PlayerState | null) => {
   if (val && val.song && val.song.sid) {
-    console.log(val, typeof val.song.sid);
     await apiClient.likeSong(val.song.sid);
   }
 });
 
 ipcMain.on('main:unlikeSong', async (event: Event, val: PlayerState | null) => {
   if (val && val.song && val.song.sid) {
-    console.log(val, typeof val.song.sid);
     await apiClient.unlikeSong(val.song.sid);
   }
 });

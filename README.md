@@ -18,7 +18,7 @@
 - ~~所有options放到一个options的图标里~~
 - 鼠标在mac上会有不同的形态，应该什么都没有，或者按钮是pointer
 - ~~音乐结束自动下一首~~
-- options - refresh
+- ~~options - refresh~~
 - loading default text
 - ~~set up vscode debugger~~
 - ~~time update~~
@@ -26,6 +26,7 @@
 - sponsor page
 - 各种快捷键
 - 鼠标移动到按键上显示快捷键
+- 鼠标移动到每个选项上显示说明
 - ~~各种快捷键单独放到constant里~~
 - ~~图标~~
 - ~~播放图标和文字距离远点儿~~

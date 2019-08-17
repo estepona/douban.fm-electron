@@ -222,6 +222,10 @@ Mousetrap.bind(shortcuts.unlike, () => {
   }
 });
 
+Mousetrap.bind(shortcuts.refresh, () => {
+  ipcRenderer.send('main:refresh');
+});
+
 Mousetrap.bind(shortcuts.setWindowOnTop, () => {
   ipcRenderer.send('main:setWindowOnTop');
 });
