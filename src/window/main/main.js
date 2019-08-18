@@ -2,7 +2,7 @@ const electron = require('electron');
 const Mousetrap = require('mousetrap');
 const { ipcRenderer } = electron;
 
-const shortcut = require('../../../dist/util/shortcut');
+const shortcut = require('../../../dist/constant/shortcut');
 const { shortcuts } = shortcut;
 
 const video = document.querySelector('#video');
