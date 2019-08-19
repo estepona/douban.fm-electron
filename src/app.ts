@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import * as _ from 'lodash';
 import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell, ipcRenderer } from 'electron';
 
+import * as locale from './config/locale';
 import apiClient from './api/apiClient';
 import { getNextSong } from './ipc/main';
 import { readAuth, writeAuth, resetAuth } from './util/auth';
@@ -22,6 +23,7 @@ const mainHtmlPath = path.join(__dirname, '..', 'src', 'window', 'main', 'main.h
 const loginHtmlPath = path.join(__dirname, '..', 'src', 'window', 'login', 'login.html');
 
 let likedSongs: LikedSongs | null = null;
+let recChannels: RecChannels | null = null;
 
 const createMainWindow = async () => {
   if (authInfo) {
@@ -226,6 +228,31 @@ optionMenu.append(
           }
         },
       },
+      {
+        label: '豆瓣推荐',
+        submenu: [
+          {
+            label: locale.recChannels.artist.zh,
+            submenu: [],
+          },
+          {
+            label: locale.recChannels.track.zh,
+            submenu: [],
+          },
+          {
+            label: locale.recChannels.scenario.zh,
+            submenu: [],
+          },
+          {
+            label: locale.recChannels.language.zh,
+            submenu: [],
+          },
+          {
+            label: locale.recChannels.genre.zh,
+            submenu: [],
+          },
+        ],
+      },
     ],
   }),
 );
@@ -367,6 +394,7 @@ ipcMain.on('main:unlikeSong', async (event: Event, val: PlayerState | null) => {
 app.on('ready', async () => {
   await createMainWindow();
 
+  // play douban selected song
   let song: Song | null = null;
   while (!song) {
     song = await apiClient.getDoubanSelectedSong(true);
@@ -378,6 +406,10 @@ app.on('ready', async () => {
       song,
     });
   }
+
+  // fetch rec channels and populate menu
+  recChannels = await apiClient.getRecChannels();
+  // TODO: build menu from template and push to optionMenu
 });
 
 app.on('activate', async () => {
