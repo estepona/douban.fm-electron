@@ -6,6 +6,7 @@ import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell } fro
 import * as locale from './config/locale';
 import apiClient from './api/client';
 import { getNextSong } from './ipc/main';
+import { buildDoubanSelectedMenu } from './menu/option_menu';
 import { readAuth, writeAuth, resetAuth } from './util/auth';
 
 dotenv.config();
@@ -187,6 +188,10 @@ optionMenu.append(
                 optionMenu.items[3].submenu.items[1].submenu.items[1].checked = false;
                 // 我的 -> 兆赫 -> 豆瓣精选
                 optionMenu.items[4].submenu.items[0].checked = false;
+                // 我的 -> 兆赫 -> 豆瓣推荐
+                optionMenu.items[4].submenu.items[1].submenu.items.forEach(aggCh => {
+                  aggCh.submenu.items.forEach(ch => (ch.checked = false));
+                });
               }
             },
           },
@@ -219,6 +224,10 @@ optionMenu.append(
                 optionMenu.items[3].submenu.items[1].submenu.items[1].checked = true;
                 // 我的 -> 兆赫 -> 豆瓣精选
                 optionMenu.items[4].submenu.items[0].checked = false;
+                // 我的 -> 兆赫 -> 豆瓣推荐
+                optionMenu.items[4].submenu.items[1].submenu.items.forEach(aggCh => {
+                  aggCh.submenu.items.forEach(ch => (ch.checked = false));
+                });
               }
             },
           },
@@ -246,33 +255,12 @@ optionMenu.append(
             optionMenu.items[3].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
             // 我的 -> 兆赫 -> 豆瓣精选
             optionMenu.items[4].submenu.items[0].checked = true;
+            // 我的 -> 兆赫 -> 豆瓣推荐
+            optionMenu.items[4].submenu.items[1].submenu.items.forEach(aggCh => {
+              aggCh.submenu.items.forEach(ch => (ch.checked = false));
+            });
           }
         },
-      },
-      {
-        label: '豆瓣推荐',
-        submenu: [
-          {
-            label: locale.recChannels.artist.zh,
-            submenu: [],
-          },
-          {
-            label: locale.recChannels.track.zh,
-            submenu: [],
-          },
-          {
-            label: locale.recChannels.scenario.zh,
-            submenu: [],
-          },
-          {
-            label: locale.recChannels.language.zh,
-            submenu: [],
-          },
-          {
-            label: locale.recChannels.genre.zh,
-            submenu: [],
-          },
-        ],
       },
     ],
   }),
@@ -360,6 +348,25 @@ ipcMain.on('login:login', async (event: Event, vals: string[]) => {
     optionMenu.items[3].enabled = true;
 
     event.sender.send('login:success');
+
+    // refetch rec channels and populate menu
+    if (mainWindow) {
+      const doubanSelectedMenu = await buildDoubanSelectedMenu(mainWindow, optionMenu);
+
+      if (optionMenu.items[4].submenu.items.length === 1) {
+        optionMenu.items[4].submenu.append(
+          new MenuItem({
+            label: '豆瓣推荐',
+            submenu: doubanSelectedMenu,
+          }),
+        );
+      } else if (optionMenu.items[4].submenu.items.length === 2) {
+        optionMenu.items[4].submenu.items[1] = new MenuItem({
+          label: '豆瓣推荐',
+          submenu: doubanSelectedMenu,
+        });
+      }
+    }
   } catch (error) {
     event.sender.send('login:fail', error.message);
   }
@@ -436,11 +443,16 @@ app.on('ready', async () => {
     if (authInfo) {
       mainWindow.webContents.send('main:login');
     }
-  }
 
-  // fetch rec channels and populate menu
-  recChannels = await apiClient.getRecChannels();
-  // TODO: build menu from template and push to optionMenu
+    // fetch rec channels and populate menu
+    const doubanSelectedMenu = await buildDoubanSelectedMenu(mainWindow, optionMenu);
+    optionMenu.items[4].submenu.append(
+      new MenuItem({
+        label: '豆瓣推荐',
+        submenu: doubanSelectedMenu,
+      }),
+    );
+  }
 });
 
 app.on('activate', async () => {

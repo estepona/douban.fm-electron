@@ -36,7 +36,7 @@ class ApiClient {
       .map(v => v.join('='))
       .join('&');
 
-    const authRes: AuthInfo = await Axios.post(`https://www.douban.com/service/auth2/token?${authQueryString}`, null, {
+    const authInfo: AuthInfo = await Axios.post(`https://www.douban.com/service/auth2/token?${authQueryString}`, null, {
       headers: this.headers,
       withCredentials: true,
     })
@@ -49,9 +49,9 @@ class ApiClient {
         }
       });
 
-    this.setAccessToken(authRes.access_token);
+    this.setAccessToken(authInfo.access_token);
 
-    return authRes;
+    return authInfo;
   }
 
   /**

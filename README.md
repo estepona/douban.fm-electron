@@ -46,8 +46,9 @@
 - ~~每首歌有channel信息~~
 - axios wrap all requests with headers
 - git version hook
-- 登录后得到所有私人、红心、推荐频道
-- option menu change channel
+- ~~豆瓣推荐~~
+- 私人频道
+- ~~option menu change channel~~
 - ~~like event~~
 - ~~unlike event~~
 - ~~liked songs playlist~~
@@ -60,6 +61,9 @@
 - ~~full sid requires cookie in headers~~
 - ~~only loggined can like/unlike songs~~
 - mac上一格的耳机音量都太高了
+- 暂停，登出后播放键没变
+- 登录后尽管更新了豆瓣精选，但是optionMenu不会更新，只有登录后退出重进才会显示“从单曲出发”，cookie的原因？
+- 重启应用
 - set cookie gracefully: https://stackoverflow.com/questions/46288437/set-cookies-for-cross-origin-requests/46412839#46412839
 
 ## Ref
