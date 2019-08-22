@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import * as _ from 'lodash';
-import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell, ipcRenderer } from 'electron';
+import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell } from 'electron';
 
 import * as locale from './config/locale';
 import apiClient from './api/apiClient';
@@ -111,6 +111,11 @@ optionMenu.append(
     click: () => {
       !loginWindow && createLoginWindow();
       loginWindow && loginWindow.show();
+
+      if (mainWindow) {
+        // tell other pages user logged in
+        mainWindow.webContents.send('main:login');
+      }
     },
   }),
 );
@@ -118,9 +123,19 @@ optionMenu.append(
   new MenuItem({
     label: '登出',
     enabled: authInfo !== null,
-    click: () => {
+    click: async () => {
+      // logout
       resetAuth();
       authInfo = null;
+
+      if (mainWindow) {
+        // reset playerState to doubanSelectedSongs
+        const playerState = await getNextSong(null, likedSongs);
+        mainWindow.webContents.send('main:receiveNextSong', playerState);
+
+        // tell other pages user logged out
+        mainWindow.webContents.send('main:logout');
+      }
 
       // enable login
       optionMenu.items[0].enabled = true;
@@ -383,13 +398,13 @@ ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => 
 });
 
 ipcMain.on('main:likeSong', async (event: Event, val: PlayerState | null) => {
-  if (val && val.song && val.song.sid) {
+  if (authInfo && val && val.song && val.song.sid) {
     await apiClient.likeSong(val.song.sid);
   }
 });
 
 ipcMain.on('main:unlikeSong', async (event: Event, val: PlayerState | null) => {
-  if (val && val.song && val.song.sid) {
+  if (authInfo && val && val.song && val.song.sid) {
     await apiClient.unlikeSong(val.song.sid);
   }
 });
@@ -405,17 +420,22 @@ app.on('ready', async () => {
     app.dock.setIcon(appIconPath);
   }
 
-  // play douban selected song
-  let song: Song | null = null;
-  while (!song) {
-    song = await apiClient.getDoubanSelectedSong(true);
-  }
-
   if (mainWindow) {
+    // play douban selected songs
+    let song: Song | null = null;
+    while (!song) {
+      song = await apiClient.getDoubanSelectedSong(true);
+    }
+
     mainWindow.webContents.send('main:receiveNextSong', {
       channel: -10,
       song,
     });
+
+    // tell other pages user logged in
+    if (authInfo) {
+      mainWindow.webContents.send('main:login');
+    }
   }
 
   // fetch rec channels and populate menu

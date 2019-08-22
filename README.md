@@ -58,6 +58,8 @@
 - refactor main.js, maybe main.ts?
 - ~~Electron\[9861:463831\] *** WARNING: Textured window <AtomNSWindow: 0x7f9177c7fa10> is getting an implicitly transparent titlebar. This will break when linking against newer SDKs. Use NSWindow's -titlebarAppearsTransparent=YES instead.~~
 - ~~full sid requires cookie in headers~~
+- ~~only loggined can like/unlike songs~~
+- mac上一格的耳机音量都太高了
 - set cookie gracefully: https://stackoverflow.com/questions/46288437/set-cookies-for-cross-origin-requests/46412839#46412839
 
 ## Ref

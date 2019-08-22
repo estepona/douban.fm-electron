@@ -15,6 +15,7 @@ const pausePlayButton = document.querySelector('#pausePlayButton');
 const nextButton = document.querySelector('#nextButton');
 const likeButton = document.querySelector('#likeButton');
 
+let loggedIn = false;
 let playerState = null;
 
 let paused = false;
@@ -90,16 +91,18 @@ likeButton.addEventListener('mouseout', e => {
 likeButton.addEventListener('click', e => {
   e.preventDefault();
 
-  if (liked) {
-    ipcRenderer.send('main:unlikeSong', playerState);
+  if (loggedIn) {
+    if (liked) {
+      ipcRenderer.send('main:unlikeSong', playerState);
 
-    liked = false;
-    likeButton.src = '../../asset/icon/like-button-white.svg';
-  } else {
-    ipcRenderer.send('main:likeSong', playerState);
+      liked = false;
+      likeButton.src = '../../asset/icon/like-button-white.svg';
+    } else {
+      ipcRenderer.send('main:likeSong', playerState);
 
-    liked = true;
-    likeButton.src = '../../asset/icon/like-button-red.svg';
+      liked = true;
+      likeButton.src = '../../asset/icon/like-button-red.svg';
+    }
   }
 });
 
@@ -143,6 +146,14 @@ video.addEventListener('timeupdate', e => {
 /**
  * ipc
  */
+ipcRenderer.on('main:login', (event, val) => {
+  loggedIn = true;
+});
+
+ipcRenderer.on('main:logout', (event, val) => {
+  loggedIn = false;
+});
+
 ipcRenderer.on('main:receiveNextSong', (event, val) => {
   playerState = val;
 
