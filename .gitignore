@@ -8,3 +8,6 @@ out
 # credential
 .env
 auth.json
+
+# misc
+.DS_Store

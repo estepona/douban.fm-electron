@@ -8,6 +8,7 @@
     "watch": "npx tsc -w",
     "start": "npm run build && npx electron ./dist/app.js",
     "package-win32": "npx electron-packager . --platform=win32 --out=out",
+    "package-mac": "npx electron-packager . --platform=darwin --out=out",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
