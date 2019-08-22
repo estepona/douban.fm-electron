@@ -51,6 +51,9 @@ const createMainWindow = async () => {
 
     transparent: true,
     frame: false,
+
+    minimizable: false,
+    maximizable: false,
     resizable: false,
     fullscreenable: false,
 
@@ -76,6 +79,9 @@ const createLoginWindow = () => {
 
     transparent: true,
     frame: false,
+
+    minimizable: false,
+    maximizable: false,
     resizable: false,
     fullscreenable: false,
 

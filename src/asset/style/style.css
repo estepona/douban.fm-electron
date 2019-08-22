@@ -2,6 +2,8 @@ body {
   margin: 8px;
   background: rgba(0, 0, 0, 0);
 
+  cursor: default;
+
   -webkit-app-region: drag;
 }
 
