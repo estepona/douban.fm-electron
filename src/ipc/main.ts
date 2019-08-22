@@ -1,4 +1,4 @@
-import apiClient from '../api/apiClient';
+import apiClient from '../api/client';
 
 export const getNextSong = async (ps: PlayerState | null, ls?: LikedSongs | null): Promise<PlayerState> => {
   let channel: ChannelId | 'liked' | null = null;

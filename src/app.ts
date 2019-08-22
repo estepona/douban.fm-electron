@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell } from 'electron';
 
 import * as locale from './config/locale';
-import apiClient from './api/apiClient';
+import apiClient from './api/client';
 import { getNextSong } from './ipc/main';
 import { readAuth, writeAuth, resetAuth } from './util/auth';
 
