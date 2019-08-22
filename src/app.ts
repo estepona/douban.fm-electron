@@ -310,7 +310,7 @@ optionMenu.append(
     label: '置顶',
     type: 'checkbox',
     checked: isMainWindowSetTop,
-    accelerator: process.platform === 'win32' ? 'Alt+F3' : 'CommandOrControl+E',
+    accelerator: process.platform === 'win32' ? 'Alt+F2' : 'CommandOrControl+E',
     click: () => {
       mainWindow && mainWindow.setAlwaysOnTop(!isMainWindowSetTop);
       isMainWindowSetTop = !isMainWindowSetTop;
@@ -320,6 +320,16 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: '检查更新',
+  }),
+);
+optionMenu.append(
+  new MenuItem({
+    label: '重启',
+    accelerator: process.platform === 'win32' ? 'Alt+F3' : 'CommandOrControl+L',
+    click: () => {
+      app.relaunch();
+      app.quit();
+    },
   }),
 );
 optionMenu.append(
@@ -392,6 +402,10 @@ ipcMain.on('main:refresh', async (event: Event) => {
 
 ipcMain.on('main:setWindowOnTop', (event: Event) => {
   optionMenu.items[10].click();
+});
+
+ipcMain.on('main:relaunch', (event: Event) => {
+  optionMenu.items[12].click();
 });
 
 ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => {

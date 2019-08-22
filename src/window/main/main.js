@@ -237,6 +237,10 @@ Mousetrap.bind(shortcuts.refresh, () => {
   ipcRenderer.send('main:refresh');
 });
 
+Mousetrap.bind(shortcuts.relaunch, () => {
+  ipcRenderer.send('main:relaunch');
+});
+
 Mousetrap.bind(shortcuts.setWindowOnTop, () => {
   ipcRenderer.send('main:setWindowOnTop');
 });
