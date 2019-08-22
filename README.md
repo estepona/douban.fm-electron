@@ -40,7 +40,7 @@
 - 更新版本
 - ~~redheart -> liked~~
 - ~~shuffle liked songs~~
-- mac上显示icon和title有问题
+- mac上显示icon和title有问题: https://stackoverflow.com/questions/41551110/unable-to-override-app-name-on-mac-os-electron-menu
 - ~~置顶快捷键不管用~~
 - 不能有各种选择文字
 - ~~每首歌有channel信息~~
@@ -56,7 +56,7 @@
 - 登录按钮鼠标悬在上面显示名字
 - ~~感谢子昭和小炎~~
 - refactor main.js, maybe main.ts?
-- Electron\[9861:463831\] *** WARNING: Textured window <AtomNSWindow: 0x7f9177c7fa10> is getting an implicitly transparent titlebar. This will break when linking against newer SDKs. Use NSWindow's -titlebarAppearsTransparent=YES instead.
+- ~~Electron\[9861:463831\] *** WARNING: Textured window <AtomNSWindow: 0x7f9177c7fa10> is getting an implicitly transparent titlebar. This will break when linking against newer SDKs. Use NSWindow's -titlebarAppearsTransparent=YES instead.~~
 - ~~full sid requires cookie in headers~~
 - set cookie gracefully: https://stackoverflow.com/questions/46288437/set-cookies-for-cross-origin-requests/46412839#46412839
 

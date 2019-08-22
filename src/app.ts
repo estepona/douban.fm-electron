@@ -400,6 +400,11 @@ ipcMain.on('main:unlikeSong', async (event: Event, val: PlayerState | null) => {
 app.on('ready', async () => {
   await createMainWindow();
 
+  // macOS specific
+  if (process.platform === 'darwin') {
+    app.dock.setIcon(appIconPath);
+  }
+
   // play douban selected song
   let song: Song | null = null;
   while (!song) {
