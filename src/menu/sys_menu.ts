@@ -2,7 +2,7 @@ import { Menu } from 'electron';
 
 import * as config from '../config';
 
-export const buildSysMenu = () => {
+export const buildSysMenu = (): Menu => {
   const template = [
     ...(process.platform === 'darwin'
       ? [
@@ -13,6 +13,5 @@ export const buildSysMenu = () => {
       : []),
   ];
 
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+  return Menu.buildFromTemplate(template);
 };

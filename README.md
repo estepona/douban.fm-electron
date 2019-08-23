@@ -1,4 +1,29 @@
 # douban.fm-electron
+A tiny, elegent douban.fm desktop client developed with electron.
+
+此处配图 from doc
+
+## Features
+- login/logout, cookie saving
+- channels:
+    - douban selected
+    - douban recommended
+    - liked songs
+    - personal channel
+- set window on top
+
+## Shortcuts
+- pause or play: `space`
+- next song: `right`
+- like song: `up`
+- unlike song: `down`
+- refresh: `F5` (Win / Linux), `Cmd+R` (Mac)
+- set window on top: `Alt+F2` (Win / Linux), `Cmd+E` (Mac)
+- relaunch: `Alt+F3` (Win / Linux), `Cmd+L` (Mac)
+- quit: `Alt+F4` (Win / Linux), `Cmd+Q` (Mac)
+
+## Known Issues
+- To view "从单曲出发", please login and relaunch;
 
 ## TODO
 - system tray control
@@ -24,8 +49,12 @@
 - ~~time update~~
 - ~~about page~~
 - sponsor page
-- 各种快捷键
+- 快捷键
+    - 精选
+    - 红心
+    - 私人
 - 鼠标移动到按键上显示快捷键
+    - 新的webpage
 - 鼠标移动到每个选项上显示说明
 - ~~各种快捷键单独放到constant里~~
 - ~~图标~~
@@ -81,3 +110,6 @@
 
 ## Credit
 <div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
+## LICENSE
+MIT

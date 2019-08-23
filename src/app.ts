@@ -7,6 +7,7 @@ import * as config from './config';
 import apiClient from './api/client';
 import { getNextSong } from './ipc/main';
 import { buildDoubanSelectedMenu } from './menu/option_menu';
+import { buildSysMenu } from './menu/sys_menu';
 import { readAuth, writeAuth, resetAuth } from './util/auth';
 
 dotenv.config();
@@ -101,6 +102,9 @@ const createLoginWindow = () => {
 /**
  * menu
  */
+// const sysMenu = buildSysMenu();
+// Menu.setApplicationMenu(sysMenu);
+
 const optionMenu = new Menu();
 
 let isMainWindowSetTop = false;
