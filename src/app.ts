@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import * as _ from 'lodash';
 import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell } from 'electron';
 
-import * as locale from './config/locale';
+import * as config from './config';
 import apiClient from './api/client';
 import { getNextSong } from './ipc/main';
 import { buildDoubanSelectedMenu } from './menu/option_menu';
@@ -47,7 +47,7 @@ const createMainWindow = async () => {
     x: primaryResoultion.width / 2 - (300 + 16) / 2,
     y: primaryResoultion.height / 10,
 
-    title: 'douban.fm客户端',
+    title: config.general.appName,
     icon: appIconPath,
 
     transparent: true,
