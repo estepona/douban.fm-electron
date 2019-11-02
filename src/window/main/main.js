@@ -24,6 +24,11 @@ let songLength = 0;
 let songLengthFormatted = '';
 
 /**
+ * video defaults
+ */
+video.volume = 0.5;
+
+/**
  * pausePlayButton event listeners
  */
 pausePlayButton.addEventListener('mouseover', e => {
