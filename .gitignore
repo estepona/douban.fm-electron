@@ -2,8 +2,11 @@
 node_modules
 
 # Out
-dist
 out
+tsout
+
+# Distribute
+dist
 
 # credential
 .env
