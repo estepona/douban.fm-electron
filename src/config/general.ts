@@ -1,1 +1,1 @@
-export const appName = 'douban.fm客户端';
+export const appName = 'douban.fm-electron';

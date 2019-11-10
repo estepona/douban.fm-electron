@@ -1,15 +1,15 @@
 # douban.fm-electron
 A tiny, elegant douban.fm desktop client developed with electron.
 
-此处配图 from doc
+![此处配图 from doc]()
 
 ## Features
 - login/logout, cookie saving
 - channels:
-    - douban selected
-    - douban recommended
-    - liked songs
-    - personal channel
+    - douban selected / 豆瓣精选
+    - douban recommended / 豆瓣推荐
+    - liked songs / 红心歌曲
+    - personal channel / 私人频道
 - set window on top
 
 ## Shortcuts
@@ -44,7 +44,7 @@ A tiny, elegant douban.fm desktop client developed with electron.
 - [x] 鼠标在mac上会有不同的形态，应该什么都没有，或者按钮是pointer
 - [x] 音乐结束自动下一首
 - [x] options - refresh
-- loading default text
+- [ ] loading default text
 - [x] set up vscode debugger
 - [x] time update
 - [x] about page
@@ -61,9 +61,9 @@ A tiny, elegant douban.fm desktop client developed with electron.
 - [x] 播放图标和文字距离远点儿
 - [x] 艺术家文字小点儿
 - [ ] 鼠标移到时间整个窗口变成进度条
-- [ ] style button
+- [ ] style buttons
 - [ ] english support
-- [ ] console.log 有utf-8问题
+- [x] console.log 有utf-8问题
 - [x] 登录成功自动3S后关闭，文字在消息里
 - [x] 安装
 - [ ] 更新版本
@@ -96,9 +96,12 @@ A tiny, elegant douban.fm desktop client developed with electron.
 - [ ] change macOS sys menu
 - [ ] set cookie gracefully: https://stackoverflow.com/questions/46288437/set-cookies-for-cross-origin-requests/46412839#46412839
 - [x] 降低初始音量
-- [ ] macOS切换app的图标不够清晰
-- [x] macOS的app名字改成douban.fm
-- [ ] macOS安装后无法登出
+- [ ] 换个icon
+- [x] macOS的app名字改成douban.fm-electron
+- [x] macOS安装后无法登出
+- [x] change location to save user data
+- [ ] macOS unable to select text
+- [ ] 登陆成功后倒计时有时不准
 
 ## Ref
 - [豆瓣FM API](https://github.com/zonyitoo/doubanfm-qt/wiki/%E8%B1%86%E7%93%A3FM-API)

@@ -1,7 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { app } from 'electron';
+import { appName } from '../config/general';
 
-const authPath = path.join(__dirname, '..', '..', 'auth.json');
+const appDataPath = app.getPath('appData');
+const authPath = path.join(appDataPath, appName, 'auth.json');
 
 export const readAuth = (): AuthInfo | null => {
   try {
