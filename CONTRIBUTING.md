@@ -28,7 +28,7 @@ To develop douban.fm-electron on your machine, here are some tips:
 2. Install douban.fm-electron dependencies
 
    ```bash
-   npm install --dev
+   npm install
    ```
 
 ## Unit testing
@@ -43,3 +43,6 @@ Use eslint and prettier.
 
 Use `electron-builder`:
 - for Mac, issue `npx electron-builder -m`
+- for Windows, issue `npx electron-builder -w --x64`
+
+Then find the installer under `./dist`

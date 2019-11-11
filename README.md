@@ -3,6 +3,8 @@ A tiny, elegant douban.fm desktop client developed with electron.
 
 ![此处配图 from doc]()
 
+If anything doesn't work, try refreshing!
+
 ## Features
 - login/logout, cookie saving
 - channels:
@@ -10,7 +12,7 @@ A tiny, elegant douban.fm desktop client developed with electron.
     - douban recommended / 豆瓣推荐
     - liked songs / 红心歌曲
     - personal channel / 私人频道
-- set window on top
+- set window on top / 置顶
 
 ## Shortcuts
 - pause or play: `space`

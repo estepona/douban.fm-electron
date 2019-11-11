@@ -166,11 +166,11 @@ class ApiClient {
   }
 
   public async downloadSong() {
-    return;
+    throw Error('not implemented');
   }
 
   public async downloadPlaylist() {
-    return;
+    throw Error('not implemented');
   }
 }
 
