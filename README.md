@@ -1,7 +1,7 @@
 # douban.fm-electron
 A tiny, elegant douban.fm desktop client developed with electron.
 
-![此处配图 from doc]()
+![example](./src/asset/img/example.png)
 
 If anything doesn't work, try refreshing!
 
