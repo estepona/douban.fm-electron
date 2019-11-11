@@ -13,6 +13,13 @@ If anything doesn't work, try refreshing!
     - liked songs / 红心歌曲
     - personal channel / 私人频道
 - set window on top / 置顶
+- ...
+
+## Install
+
+Mac and Windows installers can be found at https://github.com/estepona/douban.fm-electron/releases.
+
+Currently all releases are pre-releases, if you find any bugs and have any feature improvements, please submit an issue! Thank you!
 
 ## Shortcuts
 - pause or play: `space`
