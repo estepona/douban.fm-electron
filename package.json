@@ -1,6 +1,6 @@
 {
   "name": "douban.fm-electron",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A tiny, elegant douban.fm desktop client developed with electron.",
   "author": "Binghuan Zhang <esteponawondering@gmail.com>",
   "repository": {

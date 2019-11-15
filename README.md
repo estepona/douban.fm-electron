@@ -105,7 +105,7 @@ Currently all releases are pre-releases, if you find any bugs and have any featu
 - [ ] change macOS sys menu
 - [ ] set cookie gracefully: https://stackoverflow.com/questions/46288437/set-cookies-for-cross-origin-requests/46412839#46412839
 - [x] 降低初始音量
-- [ ] 换个icon
+- [x] 换个icon
 - [x] macOS的app名字改成douban.fm-electron
 - [x] macOS安装后无法登出
 - [x] change location to save user data

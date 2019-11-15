@@ -20,7 +20,7 @@ let authInfo = readAuth();
 let mainWindow: BrowserWindow | null;
 let loginWindow: BrowserWindow | null;
 
-const appIconPath = path.join(__dirname, '..', 'src', 'asset', 'icon', 'doubanfm-icon-grey.png');
+const appIconPath = path.join(__dirname, '..', 'build', 'icon.png');
 const mainHtmlPath = path.join(__dirname, '..', 'src', 'window', 'main', 'main.html');
 const loginHtmlPath = path.join(__dirname, '..', 'src', 'window', 'login', 'login.html');
 
