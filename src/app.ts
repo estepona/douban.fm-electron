@@ -1,31 +1,30 @@
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import * as _ from 'lodash';
-import { app, BrowserWindow, Event, ipcMain, Menu, MenuItem, screen, shell } from 'electron';
+import { app, ipcMain, screen, shell, BrowserWindow, Event, Menu, MenuItem } from 'electron';
 
 import * as config from './config';
 import apiClient from './api/client';
 import { getNextSong } from './ipc/main';
-import { buildDoubanSelectedMenu } from './menu/option_menu';
-import { buildSysMenu } from './menu/sys_menu';
-import { readAuth, writeAuth, resetAuth } from './util/auth';
+import { buildDoubanSelectedMenu, OptionMenuItems } from './menu/option_menu';
+import { readAuth, resetAuth, writeAuth } from './util/auth';
 
 dotenv.config();
 
-let authInfo = readAuth();
+export let authInfo = readAuth();
 
 /**
  * window
  */
-let mainWindow: BrowserWindow | null;
-let loginWindow: BrowserWindow | null;
+export let mainWindow: BrowserWindow | null = null;
+export let loginWindow: BrowserWindow | null = null;
 
 const appIconPath = path.join(__dirname, '..', 'build', 'icon.png');
 const mainHtmlPath = path.join(__dirname, '..', 'src', 'window', 'main', 'main.html');
 const loginHtmlPath = path.join(__dirname, '..', 'src', 'window', 'login', 'login.html');
 
-let likedSongs: LikedSongs | null = null;
-let recChannels: RecChannels | null = null;
+export let likedSongs: LikedSongs | null = null;
+export let recChannels: RecChannels | null = null;
 
 const createMainWindow = async () => {
   if (authInfo) {
@@ -71,7 +70,7 @@ const createMainWindow = async () => {
   });
 };
 
-const createLoginWindow = () => {
+export const createLoginWindow = () => {
   loginWindow = new BrowserWindow({
     width: 300 + 16,
     height: 120 + 16,
@@ -102,9 +101,6 @@ const createLoginWindow = () => {
 /**
  * menu
  */
-// const sysMenu = buildSysMenu();
-// Menu.setApplicationMenu(sysMenu);
-
 const optionMenu = new Menu();
 
 let isMainWindowSetTop = false;
@@ -142,12 +138,9 @@ optionMenu.append(
         mainWindow.webContents.send('main:logout');
       }
 
-      // enable login
-      optionMenu.items[0].enabled = true;
-      // disable logout
-      optionMenu.items[1].enabled = false;
-      // digable personal
-      optionMenu.items[3].enabled = false;
+      optionMenu.items[OptionMenuItems.Login].enabled = true;
+      optionMenu.items[OptionMenuItems.Logout].enabled = false;
+      optionMenu.items[OptionMenuItems.Me].enabled = false;
     },
   }),
 );
@@ -187,13 +180,13 @@ optionMenu.append(
                 mainWindow.webContents.send('main:receiveNextSong', playerState);
 
                 // 我的 -> 红心 -> 顺序
-                optionMenu.items[3].submenu.items[1].submenu.items[0].checked = true;
+                optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[0].checked = true;
                 // 我的 -> 红心 -> 随机
-                optionMenu.items[3].submenu.items[1].submenu.items[1].checked = false;
+                optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[1].checked = false;
                 // 我的 -> 兆赫 -> 豆瓣精选
-                optionMenu.items[4].submenu.items[0].checked = false;
+                optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = false;
                 // 我的 -> 兆赫 -> 豆瓣推荐
-                optionMenu.items[4].submenu.items[1].submenu.items.forEach(aggCh => {
+                optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
                   aggCh.submenu.items.forEach(ch => (ch.checked = false));
                 });
               }
@@ -223,13 +216,13 @@ optionMenu.append(
                 mainWindow.webContents.send('main:receiveNextSong', playerState);
 
                 // 我的 -> 红心 -> 顺序
-                optionMenu.items[3].submenu.items[1].submenu.items[0].checked = false;
+                optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[0].checked = false;
                 // 我的 -> 红心 -> 随机
-                optionMenu.items[3].submenu.items[1].submenu.items[1].checked = true;
+                optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[1].checked = true;
                 // 我的 -> 兆赫 -> 豆瓣精选
-                optionMenu.items[4].submenu.items[0].checked = false;
+                optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = false;
                 // 我的 -> 兆赫 -> 豆瓣推荐
-                optionMenu.items[4].submenu.items[1].submenu.items.forEach(aggCh => {
+                optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
                   aggCh.submenu.items.forEach(ch => (ch.checked = false));
                 });
               }
@@ -256,11 +249,11 @@ optionMenu.append(
             });
 
             // 我的 -> 红心
-            optionMenu.items[3].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+            optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
             // 我的 -> 兆赫 -> 豆瓣精选
-            optionMenu.items[4].submenu.items[0].checked = true;
+            optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = true;
             // 我的 -> 兆赫 -> 豆瓣推荐
-            optionMenu.items[4].submenu.items[1].submenu.items.forEach(aggCh => {
+            optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
               aggCh.submenu.items.forEach(ch => (ch.checked = false));
             });
           }
@@ -284,11 +277,6 @@ optionMenu.append(
 );
 optionMenu.append(
   new MenuItem({
-    label: 'Sponsor',
-  }),
-);
-optionMenu.append(
-  new MenuItem({
     type: 'separator',
   }),
 );
@@ -302,9 +290,12 @@ optionMenu.append(
         mainWindow.webContents.send('main:receiveNextSong', playerState);
 
         // 我的 -> 红心
-        optionMenu.items[3].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+        optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
         // 我的 -> 兆赫 -> 豆瓣精选
-        optionMenu.items[4].submenu.items[0].checked = true;
+        optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = true;
+
+        // refresh DoubanSelected
+        await buildDoubanSelectedMenu(mainWindow, optionMenu);
       }
     },
   }),
@@ -354,32 +345,14 @@ ipcMain.on('login:login', async (event: Event, vals: string[]) => {
     authInfo = await apiClient.login(vals[0], vals[1]);
     writeAuth(authInfo);
 
-    // disable login
-    optionMenu.items[0].enabled = false;
-    // enable logout
-    optionMenu.items[1].enabled = true;
-    // enable personal
-    optionMenu.items[3].enabled = true;
+    optionMenu.items[OptionMenuItems.Login].enabled = false;
+    optionMenu.items[OptionMenuItems.Logout].enabled = true;
+    optionMenu.items[OptionMenuItems.Me].enabled = true;
 
     event.sender.send('login:success');
 
-    // refetch rec channels and populate menu
     if (mainWindow) {
-      const doubanSelectedMenu = await buildDoubanSelectedMenu(mainWindow, optionMenu);
-
-      if (optionMenu.items[4].submenu.items.length === 1) {
-        optionMenu.items[4].submenu.append(
-          new MenuItem({
-            label: '豆瓣推荐',
-            submenu: doubanSelectedMenu,
-          }),
-        );
-      } else if (optionMenu.items[4].submenu.items.length === 2) {
-        optionMenu.items[4].submenu.items[1] = new MenuItem({
-          label: '豆瓣推荐',
-          submenu: doubanSelectedMenu,
-        });
-      }
+      await buildDoubanSelectedMenu(mainWindow, optionMenu);
     }
   } catch (error) {
     event.sender.send('login:fail', error.message);
@@ -401,15 +374,15 @@ ipcMain.on('main:openOptionMenu', (event: Event) => {
 });
 
 ipcMain.on('main:refresh', async (event: Event) => {
-  await optionMenu.items[9].click();
+  await optionMenu.items[OptionMenuItems.Refresh].click();
 });
 
 ipcMain.on('main:setWindowOnTop', (event: Event) => {
-  optionMenu.items[10].click();
+  optionMenu.items[OptionMenuItems.SetTop].click();
 });
 
 ipcMain.on('main:relaunch', (event: Event) => {
-  optionMenu.items[12].click();
+  optionMenu.items[OptionMenuItems.Relaunch].click();
 });
 
 ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => {
@@ -462,14 +435,8 @@ app.on('ready', async () => {
       mainWindow.webContents.send('main:login');
     }
 
-    // fetch rec channels and populate menu
-    const doubanSelectedMenu = await buildDoubanSelectedMenu(mainWindow, optionMenu);
-    optionMenu.items[4].submenu.append(
-      new MenuItem({
-        label: '豆瓣推荐',
-        submenu: doubanSelectedMenu,
-      }),
-    );
+    // build douban selected menu
+    await buildDoubanSelectedMenu(mainWindow, optionMenu);
   }
 });
 

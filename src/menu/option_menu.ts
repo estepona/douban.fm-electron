@@ -4,10 +4,23 @@ import * as locale from '../config/locale';
 import apiClient from '../api/client';
 import { getNextSong } from '../ipc/main';
 
-// TODO
-export const enum optionMenu {}
+export enum OptionMenuItems {
+  Login,
+  Logout,
+  Separator1,
+  Me,
+  FMs,
+  Separator2,
+  Github,
+  Separator3,
+  Refresh,
+  SetTop,
+  CheckUpdate,
+  Relaunch,
+  Quit,
+}
 
-export const buildDoubanSelectedMenu = async (mainWindow: BrowserWindow, optionMenu: Menu): Promise<Menu> => {
+export const createDoubanSelectedMenu = async (mainWindow: BrowserWindow, optionMenu: Menu): Promise<Menu> => {
   const recChannels = await apiClient.getRecChannels();
 
   const addOneChannel = (channel: Channel): MenuItemConstructorOptions => {
@@ -50,7 +63,7 @@ export const buildDoubanSelectedMenu = async (mainWindow: BrowserWindow, optionM
         // check this channel
         ch.checked = true;
 
-        // uncheck all other rec channels
+        // un-check all other rec channels
         doubanSelectedMenu.items.forEach(aggChCopy => {
           aggChCopy.submenu.items.forEach(chCopy => {
             if (chCopy !== ch) {
@@ -59,11 +72,11 @@ export const buildDoubanSelectedMenu = async (mainWindow: BrowserWindow, optionM
           });
         });
 
-        // uncheck other channels in optionMenu
+        // un-check other channels in optionMenu
         // 我的 -> 红心
-        optionMenu.items[3].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+        optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
         // 我的 -> 兆赫 -> 豆瓣精选
-        optionMenu.items[4].submenu.items[0].checked = false;
+        optionMenu.items[OptionMenuItems.Me].submenu.items[0].checked = false;
 
         // send song via ipc
         let channel: number | null = null;
@@ -99,4 +112,22 @@ export const buildDoubanSelectedMenu = async (mainWindow: BrowserWindow, optionM
   });
 
   return doubanSelectedMenu;
+};
+
+export const buildDoubanSelectedMenu = async (mainWindow: BrowserWindow, optionMenu: Menu) => {
+  const doubanSelectedMenu = await createDoubanSelectedMenu(mainWindow, optionMenu);
+
+  if (optionMenu.items[OptionMenuItems.FMs].submenu.items.length === 1) {
+    optionMenu.items[OptionMenuItems.FMs].submenu.append(
+      new MenuItem({
+        label: '豆瓣推荐',
+        submenu: doubanSelectedMenu,
+      }),
+    );
+  } else if (optionMenu.items[OptionMenuItems.FMs].submenu.items.length === 2) {
+    optionMenu.items[OptionMenuItems.FMs].submenu.items[1] = new MenuItem({
+      label: '豆瓣推荐',
+      submenu: doubanSelectedMenu,
+    });
+  }
 };

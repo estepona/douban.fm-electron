@@ -20,5 +20,11 @@
   },
   "[css]": {
     "editor.formatOnSave": true
-  }
+  },
+  "cSpell.words": [
+    "douban",
+    "menu",
+    "selected",
+    "submenu"
+  ]
 }
