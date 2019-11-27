@@ -362,9 +362,9 @@ optionMenu.append(
         }
       }
 
-      if (checkUpdateWindow) {
-        checkUpdateWindow.webContents.send('checkUpdate:result', msg);
-      }
+      setTimeout(() => {
+        checkUpdateWindow && checkUpdateWindow.webContents.send('checkUpdate:result', msg);
+      }, 200);
     },
   }),
 );
