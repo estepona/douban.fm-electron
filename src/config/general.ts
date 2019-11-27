@@ -1,2 +1,2 @@
 export const appName = 'douban.fm-electron';
-export const appVersion = 'v0.1.1';
+export const appVersion = 'v0.2.0';
