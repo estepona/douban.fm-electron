@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 // TODO: put all urls in a separate place
-class ApiClient {
+class Client {
   private clientId = '02646d3fb69a52ff072d47bf23cef8fd';
   private clientSecret = 'cde5d61429abcd7c';
   private headers = {
@@ -174,4 +174,4 @@ class ApiClient {
   }
 }
 
-export default new ApiClient();
+export default new Client();

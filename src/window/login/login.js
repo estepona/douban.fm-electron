@@ -2,13 +2,13 @@ const electron = require('electron');
 const { ipcRenderer } = electron;
 
 const form = document.querySelector('form');
-const closeButton = document.getElementById('login-close-button');
-const loginMsg = document.getElementById('login-msg');
+const closeButton = document.getElementById('loginCloseButton');
+const loginMsg = document.getElementById('loginMsg');
 
 form.addEventListener('submit', e => {
   e.preventDefault();
-  const username = document.querySelector('#username').value;
-  const password = document.querySelector('#password').value;
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
   console.log(username, password);
 

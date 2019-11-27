@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { app, ipcMain, screen, shell, BrowserWindow, Event, Menu, MenuItem } from 'electron';
 
 import * as config from './config';
-import apiClient from './api/client';
+import { doubanApiClient, githubApiClient } from './api';
 import { getNextSong } from './ipc/main';
 import { buildDoubanSelectedMenu, OptionMenuItems } from './menu/option_menu';
 import { readAuth, resetAuth, writeAuth } from './util/auth';
@@ -18,25 +18,27 @@ export let authInfo = readAuth();
  */
 export let mainWindow: BrowserWindow | null = null;
 export let loginWindow: BrowserWindow | null = null;
+export let checkUpdateWindow: BrowserWindow | null = null;
 
 const appIconPath = path.join(__dirname, '..', 'build', 'icon.png');
 const mainHtmlPath = path.join(__dirname, '..', 'src', 'window', 'main', 'main.html');
 const loginHtmlPath = path.join(__dirname, '..', 'src', 'window', 'login', 'login.html');
+const checkUpdateHtmlPath = path.join(__dirname, '..', 'src', 'window', 'check_update', 'check_update.html');
 
 export let likedSongs: LikedSongs | null = null;
 export let recChannels: RecChannels | null = null;
 
 const createMainWindow = async () => {
   if (authInfo) {
-    apiClient.setAccessToken(authInfo.access_token);
+    doubanApiClient.setAccessToken(authInfo.access_token);
 
-    likedSongs = await apiClient.getLikedSongs();
+    likedSongs = await doubanApiClient.getLikedSongs();
     if (!likedSongs) {
       authInfo = null;
     }
   }
 
-  await apiClient.getAndSetCookie();
+  await doubanApiClient.getAndSetCookie();
 
   const primaryResoultion = screen.getPrimaryDisplay().workAreaSize;
 
@@ -95,6 +97,34 @@ export const createLoginWindow = () => {
 
   loginWindow.on('closed', () => {
     loginWindow = null;
+  });
+};
+
+export const createCheckUpdateWindow = () => {
+  checkUpdateWindow = new BrowserWindow({
+    width: 300 + 16,
+    height: 120 + 16,
+
+    title: 'douban.fm检查更新',
+    icon: appIconPath,
+
+    transparent: true,
+    frame: false,
+
+    minimizable: false,
+    maximizable: false,
+    resizable: false,
+    fullscreenable: false,
+
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  });
+
+  checkUpdateWindow.loadFile(checkUpdateHtmlPath);
+
+  checkUpdateWindow.on('closed', () => {
+    checkUpdateWindow = null;
   });
 };
 
@@ -167,7 +197,7 @@ optionMenu.append(
             click: async () => {
               if (mainWindow) {
                 if (!likedSongs) {
-                  likedSongs = await apiClient.getLikedSongs();
+                  likedSongs = await doubanApiClient.getLikedSongs();
                 }
 
                 const playerState = await getNextSong(
@@ -199,7 +229,7 @@ optionMenu.append(
             click: async () => {
               if (mainWindow) {
                 if (!likedSongs) {
-                  likedSongs = await apiClient.getLikedSongs();
+                  likedSongs = await doubanApiClient.getLikedSongs();
                 }
 
                 if (likedSongs) {
@@ -245,7 +275,7 @@ optionMenu.append(
           if (mainWindow) {
             mainWindow.webContents.send('main:receiveNextSong', {
               channel: -10,
-              song: await apiClient.getDoubanSelectedSong(true),
+              song: await doubanApiClient.getDoubanSelectedSong(true),
             });
 
             // 我的 -> 红心
@@ -315,6 +345,27 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: '检查更新',
+    click: async () => {
+      !checkUpdateWindow && createCheckUpdateWindow();
+      checkUpdateWindow && checkUpdateWindow.show();
+
+      const res = await githubApiClient.getReleases();
+      let msg = ['检查更新失败'];
+
+      if (res.length) {
+        if (res[0].tag_name !== config.general.appVersion) {
+          msg[0] = '新版本可供下载';
+          msg.push(res[0].tag_name);
+          msg.push(res[0].html_url);
+        } else {
+          msg[0] = '已是最新版本';
+        }
+      }
+
+      if (checkUpdateWindow) {
+        checkUpdateWindow.webContents.send('checkUpdate:result', msg);
+      }
+    },
   }),
 );
 optionMenu.append(
@@ -342,7 +393,7 @@ optionMenu.append(
  */
 ipcMain.on('login:login', async (event: Event, vals: string[]) => {
   try {
-    authInfo = await apiClient.login(vals[0], vals[1]);
+    authInfo = await doubanApiClient.login(vals[0], vals[1]);
     writeAuth(authInfo);
 
     optionMenu.items[OptionMenuItems.Login].enabled = false;
@@ -387,7 +438,7 @@ ipcMain.on('main:relaunch', (event: Event) => {
 
 ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => {
   if (val && val.channel === 'liked') {
-    likedSongs = await apiClient.getLikedSongs();
+    likedSongs = await doubanApiClient.getLikedSongs();
   }
 
   const playerState = await getNextSong(val, likedSongs);
@@ -397,13 +448,20 @@ ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => 
 
 ipcMain.on('main:likeSong', async (event: Event, val: PlayerState | null) => {
   if (authInfo && val && val.song && val.song.sid) {
-    await apiClient.likeSong(val.song.sid);
+    await doubanApiClient.likeSong(val.song.sid);
   }
 });
 
 ipcMain.on('main:unlikeSong', async (event: Event, val: PlayerState | null) => {
   if (authInfo && val && val.song && val.song.sid) {
-    await apiClient.unlikeSong(val.song.sid);
+    await doubanApiClient.unlikeSong(val.song.sid);
+  }
+});
+
+ipcMain.on('checkUpdate:close', () => {
+  if (checkUpdateWindow) {
+    checkUpdateWindow.close();
+    checkUpdateWindow = null;
   }
 });
 
@@ -422,7 +480,7 @@ app.on('ready', async () => {
     // play douban selected songs
     let song: Song | null = null;
     while (!song) {
-      song = await apiClient.getDoubanSelectedSong(true);
+      song = await doubanApiClient.getDoubanSelectedSong(true);
     }
 
     mainWindow.webContents.send('main:receiveNextSong', {

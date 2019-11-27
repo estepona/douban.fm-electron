@@ -1,7 +1,7 @@
 import { BrowserWindow, Menu, MenuItem, MenuItemConstructorOptions } from 'electron';
 
 import * as locale from '../config/locale';
-import apiClient from '../api/client';
+import apiClient from '../api/douban';
 import { getNextSong } from '../ipc/main';
 
 export enum OptionMenuItems {

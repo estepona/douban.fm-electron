@@ -1,6 +1,6 @@
 {
   "name": "douban.fm-electron",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A tiny, elegant douban.fm desktop client developed with electron.",
   "author": "Binghuan Zhang <esteponawondering@gmail.com>",
   "repository": {
@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc -w",
-    "start": "npm run build && npx electron ./tsout/app.js",
+    "start": "npx tsc && npx electron ./tsout/app.js",
     "pack": "npx electron-builder -mwl",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

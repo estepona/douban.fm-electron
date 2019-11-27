@@ -1,19 +1,17 @@
-const electron = require('electron');
 const Mousetrap = require('mousetrap');
-const { ipcRenderer } = electron;
+const { ipcRenderer } = require('electron');
 
-const shortcut = require('../../../tsout/config/shortcut');
-const { shortcuts } = shortcut;
+const { shortcuts } = require('../../../tsout/config/shortcut');
 
-const video = document.querySelector('#video');
+const video = document.getElementById('video');
 
-const songTitle = document.querySelector('#songTitle');
-const songArtistAlbum = document.querySelector('#songArtistAlbum');
-const songTime = document.querySelector('#songTime');
+const songTitle = document.getElementById('songTitle');
+const songArtistAlbum = document.getElementById('songArtistAlbum');
+const songTime = document.getElementById('songTime');
 
-const pausePlayButton = document.querySelector('#pausePlayButton');
-const nextButton = document.querySelector('#nextButton');
-const likeButton = document.querySelector('#likeButton');
+const pausePlayButton = document.getElementById('pausePlayButton');
+const nextButton = document.getElementById('nextButton');
+const likeButton = document.getElementById('likeButton');
 
 let loggedIn = false;
 let playerState = null;
@@ -162,7 +160,7 @@ ipcRenderer.on('main:logout', (event, val) => {
 ipcRenderer.on('main:receiveNextSong', (event, val) => {
   playerState = val;
 
-  // update songTitle, songArtistAlbum, vidro's src, likeButton
+  // update songTitle, songArtistAlbum, video's src, likeButton
   songTitle.innerHTML = val.song.title;
   songArtistAlbum.innerHTML = `${val.song.artist}: ${val.song.albumtitle}`;
   video.src = val.song.url;

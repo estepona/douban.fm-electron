@@ -24,14 +24,14 @@ Mac and Windows installers can be found at https://github.com/estepona/douban.fm
 Currently all releases are pre-releases, if you find any bugs and have any feature improvements, please submit an issue! Thank you!
 
 ## Shortcuts
-- pause or play: `space`
-- next song: `right`
-- like song: `up`
-- unlike song: `down`
-- refresh: `F5` (Win / Linux), `Cmd+R` (Mac)
-- set window on top: `Alt+F2` (Win / Linux), `Cmd+E` (Mac)
-- relaunch: `Alt+F3` (Win / Linux), `Cmd+L` (Mac)
-- quit: `Alt+F4` (Win / Linux), `Cmd+Q` (Mac)
+- pause or play: <kbd>space</kbd>
+- next song: <kbd>right</kbd>
+- like song: <kbd>up</kbd>
+- unlike song: <kbd>down</kbd>
+- refresh: <kbd>F5</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>R</kbd> (Mac)
+- set window on top: <kbd>Alt</kbd> + <kbd>F2</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>E</kbd> (Mac)
+- relaunch: <kbd>Alt</kbd> + <kbd>F3</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>L</kbd> (Mac)
+- quit: <kbd>Alt</kbd> + <kbd>F4</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>Q</kbd> (Mac)
 
 ## Known Issues
 - To view "从单曲出发", please login and relaunch;

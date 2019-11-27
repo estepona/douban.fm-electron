@@ -2,6 +2,7 @@
   "files.autoSave": "afterDelay",
   "editor.formatOnSave": false,
   "eslint.autoFixOnSave": true,
+  "editor.tabSize": 2,
   "eslint.validate": [
     "javascript",
     {

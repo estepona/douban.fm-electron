@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Main Process",
+      "name": "Debug Main Process via electron",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceRoot}",
@@ -14,6 +14,19 @@
         "./tsout/app.js"
       ],
       "outputCapture": "std"
+    },
+    {
+      "name": "Debug Main Process via npm",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start"],
+      // "windows": {
+      //   "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+      // },
+      "outputCapture": "std",
+      "port": 9229,
     }
   ]
 }
