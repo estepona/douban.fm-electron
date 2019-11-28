@@ -313,7 +313,7 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: '刷新',
-    accelerator: process.platform === 'win32' ? 'F5' : 'CommandOrControl+R',
+    accelerator: 'CommandOrControl+R',
     click: async () => {
       if (mainWindow) {
         const playerState = await getNextSong(null, likedSongs);
@@ -335,7 +335,7 @@ optionMenu.append(
     label: '置顶',
     type: 'checkbox',
     checked: isMainWindowSetTop,
-    accelerator: process.platform === 'win32' ? 'Alt+F2' : 'CommandOrControl+E',
+    accelerator: 'CommandOrControl+E',
     click: () => {
       mainWindow && mainWindow.setAlwaysOnTop(!isMainWindowSetTop);
       isMainWindowSetTop = !isMainWindowSetTop;
@@ -371,7 +371,7 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: '重启',
-    accelerator: process.platform === 'win32' ? 'Alt+F3' : 'CommandOrControl+L',
+    accelerator: 'CommandOrControl+L',
     click: () => {
       app.relaunch();
       app.quit();
@@ -381,7 +381,7 @@ optionMenu.append(
 optionMenu.append(
   new MenuItem({
     label: '退出',
-    accelerator: process.platform === 'win32' ? 'Alt+F4' : 'CommandOrControl+Q',
+    accelerator: 'CommandOrControl+Q',
     click: () => {
       app.quit();
     },
@@ -434,6 +434,10 @@ ipcMain.on('main:setWindowOnTop', (event: Event) => {
 
 ipcMain.on('main:relaunch', (event: Event) => {
   optionMenu.items[OptionMenuItems.Relaunch].click();
+});
+
+ipcMain.on('main:quit', (event: Event) => {
+  optionMenu.items[OptionMenuItems.Quit].click();
 });
 
 ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => {

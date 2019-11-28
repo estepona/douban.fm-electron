@@ -236,14 +236,34 @@ Mousetrap.bind(shortcuts.unlike, () => {
   }
 });
 
-Mousetrap.bind(shortcuts.refresh, () => {
+Mousetrap.bind(shortcuts.refresh, event => {
+  event.preventDefault();
+
   ipcRenderer.send('main:refresh');
 });
 
-Mousetrap.bind(shortcuts.relaunch, () => {
+Mousetrap.bind(shortcuts.setWindowOnTop, event => {
+  event.preventDefault();
+
+  ipcRenderer.send('main:setWindowOnTop');
+});
+
+Mousetrap.bind(shortcuts.relaunch, event => {
+  event.preventDefault();
+
   ipcRenderer.send('main:relaunch');
 });
 
-Mousetrap.bind(shortcuts.setWindowOnTop, () => {
-  ipcRenderer.send('main:setWindowOnTop');
+Mousetrap.bind(shortcuts.quit, event => {
+  event.preventDefault();
+
+  ipcRenderer.send('main:quit');
+});
+
+Mousetrap.bind(shortcuts.defaultClosePage, event => {
+  event.preventDefault();
+});
+
+Mousetrap.bind(shortcuts.defaultSelectAll, event => {
+  event.preventDefault();
 });
