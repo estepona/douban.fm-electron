@@ -28,10 +28,10 @@ Currently all releases are pre-releases, if you find any bugs and have any featu
 - next song: <kbd>right</kbd>
 - like song: <kbd>up</kbd>
 - unlike song: <kbd>down</kbd>
-- refresh: <kbd>Ctrl</kbd> + <kdb>R</kdb> (Win / Linux), <kbd>Cmd</kbd> + <kbd>R</kbd> (Mac)
-- set window on top: <kbd>Ctrl</kbd> + <kdb>E</kdb> (Win / Linux), <kbd>Cmd</kbd> + <kbd>E</kbd> (Mac)
-- relaunch: <kbd>Ctrl</kbd> + <kdb>L</kdb> (Win / Linux), <kbd>Cmd</kbd> + <kbd>L</kbd> (Mac)
-- quit: <kbd>Ctrl</kbd> + <kdb>Q</kdb> (Win / Linux), <kbd>Cmd</kbd> + <kbd>Q</kbd> (Mac)
+- refresh: <kbd>Ctrl</kbd> + <kbd>R</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>R</kbd> (Mac)
+- set window on top: <kbd>Ctrl</kbd> + <kbd>E</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>E</kbd> (Mac)
+- relaunch: <kbd>Ctrl</kbd> + <kbd>L</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>L</kbd> (Mac)
+- quit: <kbd>Ctrl</kbd> + <kbd>Q</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>Q</kbd> (Mac)
 
 ## Known Issues
 - To view "从单曲出发", please login and relaunch;
