@@ -34,6 +34,7 @@ Currently all releases are pre-releases, if you find any bugs and have any featu
 - quit: <kbd>Ctrl</kbd> + <kbd>Q</kbd> (Win / Linux), <kbd>Cmd</kbd> + <kbd>Q</kbd> (Mac)
 
 ## Known Issues
+- Currently, only username/password login is supported, phone/code or 3rd-party login are not supported;
 - To view "从单曲出发", please login and relaunch;
 
 ## References
