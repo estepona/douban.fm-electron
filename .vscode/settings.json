@@ -1,14 +1,13 @@
 {
   "files.autoSave": "afterDelay",
   "editor.formatOnSave": false,
-  "eslint.autoFixOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   "editor.tabSize": 2,
   "eslint.validate": [
     "javascript",
-    {
-      "language": "typescript",
-      "autoFix": true
-    },
+    "typescript"
   ],
   "[javascript]": {
     "editor.formatOnSave": true
