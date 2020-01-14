@@ -1,7 +1,7 @@
 const Mousetrap = require('mousetrap');
 const { ipcRenderer } = require('electron');
 
-const { shortcuts } = require('../../../tsout/config/shortcut');
+const { shortcuts } = require('../../config/shortcut.ts');
 
 const video = document.getElementById('video');
 
