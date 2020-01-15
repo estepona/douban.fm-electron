@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import LeftPanel from './left_panel';
+import LeftColumn from './left_column';
+import style from '../../asset/style/style.css';
 
 export interface HelloProps {
   compiler: string;
@@ -10,11 +11,8 @@ export interface HelloProps {
 export class MainWindow extends React.Component<HelloProps, {}> {
   render() {
     return (
-      <div>
-        <h1>
-          Hello from {this.props.compiler} and {this.props.framework}!
-        </h1>
-        <LeftPanel name='left panel' />
+      <div className={`${style['lv1-container']} ${style['lv1-container-main']}`}>
+        <LeftColumn />
       </div>
     );
   }

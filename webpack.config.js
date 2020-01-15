@@ -38,11 +38,34 @@ module.exports = [
           enforce: 'pre',
           test: /\.js$/,
           loader: 'source-map-loader'
-        }
+        },
+        {
+          test: /\.css$/i,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true
+              }
+            }
+          ],
+        },
+        {
+          test: /\.svg$/,
+          use: [
+            {
+              loader: 'svg-url-loader',
+              options: {
+                limit: 10000,
+              },
+            },
+          ],
+        },
       ]
     },
     resolve: {
-      extensions: ['.js', '.json', '.ts', '.tsx']
+      extensions: ['.js', '.json', '.ts', '.tsx', '.css']
     },
     output: {
       path: __dirname + '/dist',

@@ -12,7 +12,7 @@ const createWindow = () => {
   // and load the index.html of the app.
   win.loadFile('./main.html');
 
-  // win.webContents.openDevTools();
+  win.webContents.openDevTools();
 }
  
 app.on('ready', createWindow);

@@ -1,3 +1,7 @@
+declare module '*.css';
+declare module '*.png';
+declare module '*.svg';
+
 declare type Url = string;
 
 declare type Timestamp = number;
