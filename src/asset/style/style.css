@@ -11,6 +11,10 @@ body {
   -webkit-app-region: no-drag;
 }
 
+.nonDraggable {
+  -webkit-app-region: no-drag;
+}
+
 .lv1-container {
   width: 300px;
 
@@ -20,7 +24,24 @@ body {
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
 }
 
+.lv1Container {
+  width: 300px;
+
+  border-radius: 8px;
+
+  background: #f2f2f2;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+}
+
 .lv1-container-main {
+  height: 60px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.lv1ContainerMain {
   height: 60px;
 
   display: flex;
@@ -38,7 +59,27 @@ body {
   justify-content: space-evenly;
 }
 
+.lv1ContainerLogin {
+  height: 120px;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
 .lv1-container-checkUpdate {
+  height: 60px;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.lv1ContainerCheckUpdate {
   height: 60px;
 
   display: flex;
@@ -64,7 +105,33 @@ body {
   /* background: aquamarine; */
 }
 
+.leftCol {
+  width: 65px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  /* dev */
+  /* background: aquamarine; */
+}
+
 .col-middle {
+  width: 155px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  overflow: hidden;
+
+  /* dev */
+  /* background: burlywood; */
+}
+
+.middleCol {
   width: 155px;
 
   display: flex;
@@ -88,7 +155,26 @@ body {
   /* background: darkseagreen; */
 }
 
+.rightCol {
+  width: 80px;
+
+  display: flex;
+  flex-direction: column;
+
+  /* dev */
+  /* background: darkseagreen; */
+}
+
 .col-right-up {
+  height: 50%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.rightColUp {
   height: 50%;
 
   display: flex;
@@ -106,7 +192,24 @@ body {
   justify-content: space-evenly;
 }
 
+.rightColDown {
+  height: 50%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
 .base-text {
+  margin: 0;
+
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, PingFang SC, Source Han Sans CN,
+    Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
+  font-weight: 400;
+}
+
+.baseText {
   margin: 0;
 
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, PingFang SC, Source Han Sans CN,
@@ -119,7 +222,17 @@ body {
   color: rgb(74, 74, 74);
 }
 
+.baseTextSmallGrey {
+  font-size: 11px;
+  color: rgb(74, 74, 74);
+}
+
 .base-text-small-background {
+  font-size: 11px;
+  color: #f2f2f2;
+}
+
+.baseTextSmallBackground {
   font-size: 11px;
   color: #f2f2f2;
 }
@@ -131,6 +244,10 @@ body {
 }
 
 .marquee-animation {
+  animation: 15s wordsLoop linear infinite;
+}
+
+.marqueeAnimation {
   animation: 15s wordsLoop linear infinite;
 }
 
@@ -148,7 +265,17 @@ body {
   height: 20px;
 }
 
+.rightColDownButton {
+  width: 20px;
+  height: 20px;
+}
+
 #songTitle {
+  font-size: 15px;
+  color: rgb(3, 3, 3);
+}
+
+.songTitle {
   font-size: 15px;
   color: rgb(3, 3, 3);
 }
@@ -180,7 +307,24 @@ body {
   text-align: center;
 }
 
+.loginInput {
+  width: 60%;
+
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 1px solid grey;
+  outline: none;
+
+  background: #f2f2f2;
+
+  text-align: center;
+}
+
 #login-msg {
+  margin: 0px;
+}
+
+.loginMsg {
   margin: 0px;
 }
 

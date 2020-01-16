@@ -6,24 +6,26 @@ module.exports = [
     entry: './src/app.ts',
     target: 'electron-main',
     module: {
-      rules: [{
-        test: /\.ts$/,
-        include: /src/,
-        use: [{ loader: 'ts-loader' }]
-      }]
+      rules: [
+        {
+          test: /\.ts$/,
+          include: /src/,
+          use: [{ loader: 'ts-loader' }],
+        },
+      ],
     },
     resolve: {
-      extensions: ['.js', '.json', '.ts', '.tsx']
+      extensions: ['.js', '.json', '.ts', '.tsx'],
     },
     output: {
       path: __dirname + '/dist',
-      filename: 'app.js'
-    }
+      filename: 'app.js',
+    },
   },
   {
     mode: 'development',
     entry: {
-      main: './src/components/main/main_window.tsx'
+      main: './src/components/main/main_window.tsx',
     },
     target: 'electron-renderer',
     devtool: 'source-map',
@@ -32,12 +34,12 @@ module.exports = [
         {
           test: /\.ts(x?)$/,
           loader: 'ts-loader',
-          exclude: /node_modules/
+          exclude: /node_modules/,
         },
         {
           enforce: 'pre',
           test: /\.js$/,
-          loader: 'source-map-loader'
+          loader: 'source-map-loader',
         },
         {
           test: /\.css$/i,
@@ -46,9 +48,9 @@ module.exports = [
             {
               loader: 'css-loader',
               options: {
-                modules: true
-              }
-            }
+                modules: true,
+              },
+            },
           ],
         },
         {
@@ -62,21 +64,21 @@ module.exports = [
             },
           ],
         },
-      ]
+      ],
     },
     resolve: {
-      extensions: ['.js', '.json', '.ts', '.tsx', '.css']
+      extensions: ['.js', '.json', '.ts', '.tsx', '.css'],
     },
     output: {
       path: __dirname + '/dist',
-      filename: '[name].js'
+      filename: '[name].js',
     },
     plugins: [
       new HtmlWebpackPlugin({
         chunks: 'main',
         template: './src/html/main.html',
-        filename: 'main.html'
-      })
-    ]
-  }
+        filename: 'main.html',
+      }),
+    ],
+  },
 ];
