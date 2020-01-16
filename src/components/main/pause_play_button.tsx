@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import whitePauseButton from '../../asset/icon/pause-button-white.svg';
 import blackPauseButton from '../../asset/icon/pause-button-black.svg';
 import whitePlayButton from '../../asset/icon/play-button-white.svg';
@@ -14,24 +15,19 @@ interface PausePlayButtonState {
   src: string;
 }
 
-interface LeftColumnProps {
-  paused: boolean;
-  pausePlayButtonOnClick(): void;
-}
-
-class PausePlayButton extends React.Component<PausePlayButtonProps, PausePlayButtonState> {
+export default class PausePlayButton extends React.Component<PausePlayButtonProps, PausePlayButtonState> {
   constructor(props: PausePlayButtonProps) {
     super(props);
     this.state = {
       src: whitePauseButton,
     };
 
-    this.handleButtonOnMouseOver = this.handleButtonOnMouseOver.bind(this);
-    this.handleButtonOnMouseOut = this.handleButtonOnMouseOut.bind(this);
-    this.handleButtonOnClick = this.handleButtonOnClick.bind(this);
+    this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
+    this.handleOnMouseOut = this.handleOnMouseOut.bind(this);
+    this.handleOnClick = this.handleOnClick.bind(this);
   }
 
-  handleButtonOnMouseOver(e: React.MouseEvent) {
+  handleOnMouseOver(e: React.MouseEvent) {
     e.preventDefault();
 
     if (this.props.paused) {
@@ -41,7 +37,7 @@ class PausePlayButton extends React.Component<PausePlayButtonProps, PausePlayBut
     }
   }
 
-  handleButtonOnMouseOut(e: React.MouseEvent) {
+  handleOnMouseOut(e: React.MouseEvent) {
     e.preventDefault();
 
     if (this.props.paused) {
@@ -51,7 +47,7 @@ class PausePlayButton extends React.Component<PausePlayButtonProps, PausePlayBut
     }
   }
 
-  handleButtonOnClick(e: React.MouseEvent) {
+  handleOnClick(e: React.MouseEvent) {
     e.preventDefault();
 
     const prevPaused = this.props.paused;
@@ -69,24 +65,10 @@ class PausePlayButton extends React.Component<PausePlayButtonProps, PausePlayBut
       <img
         className={style.pausePlayButton}
         src={this.state.src}
-        onMouseOver={this.handleButtonOnMouseOver}
-        onMouseOut={this.handleButtonOnMouseOut}
-        onClick={this.handleButtonOnClick}
-      ></img>
-    );
-  }
-}
-
-export default class LeftColumn extends React.Component<LeftColumnProps> {
-  constructor(props: LeftColumnProps) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div className={`${style.component} ${style.leftCol}`}>
-        <PausePlayButton paused={this.props.paused} pausePlayButtonOnClick={this.props.pausePlayButtonOnClick} />
-      </div>
+        onMouseOver={this.handleOnMouseOver}
+        onMouseOut={this.handleOnMouseOut}
+        onClick={this.handleOnClick}
+      />
     );
   }
 }
