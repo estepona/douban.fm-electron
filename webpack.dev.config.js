@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = [
@@ -21,6 +22,11 @@ module.exports = [
       path: __dirname + '/dist',
       filename: 'app.js',
     },
+    plugins: [
+      new webpack.NamedModulesPlugin(),
+      new webpack.NamedChunksPlugin(),
+      new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('dev') }),
+    ],
   },
   {
     mode: 'development',

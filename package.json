@@ -12,8 +12,10 @@
   "main": "./dist/app.js",
   "scripts": {
     "watch": "npx tsc -w",
-    "build": "webpack --config ./webpack.config.js",
-    "start": "npm run build && electron ./dist/app.js",
+    "build-dev": "webpack --config ./webpack.dev.config.js",
+    "start-dev": "npm run build-dev && electron ./dist/app.js",
+    "build-prod": "webpack --config ./webpack.prod.config.js",
+    "start-prod": "npm run build-prod && electron ./dist/app.js",
     "pack": "npx electron-builder -mwl",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
