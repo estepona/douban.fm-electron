@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv';
-import { app, BrowserWindow, screen } from 'electron';
+import { app, screen, BrowserWindow } from 'electron';
+
+import * as config from './config';
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ const createMainWindow = () => {
 
     x: primaryResolution.width / 2 - (300 + 16) / 2,
     y: primaryResolution.height / 10,
+
+    title: config.general.appName,
 
     transparent: true,
     frame: false,

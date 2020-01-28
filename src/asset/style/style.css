@@ -248,7 +248,10 @@ body {
 }
 
 .marqueeAnimation {
-  animation: 15s wordsLoop linear infinite;
+  animation-name: wordsLoop;
+  animation-duration: 15s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 @keyframes wordsLoop {
