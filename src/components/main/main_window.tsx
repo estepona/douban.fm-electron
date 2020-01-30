@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { ipcRenderer } from 'electron';
 
 import { getNextSong } from '../../ipc/main';
 import { doubanApiClient, githubApiClient } from '../../api';
@@ -19,6 +20,7 @@ export interface MainWindowState {
   paused: boolean;
   liked: boolean;
 
+  channel: number | 'liked';
   song?: Song;
 
   currentSec: number;
@@ -36,6 +38,7 @@ export class MainWindow extends React.Component<{}, MainWindowState> {
       paused: false,
       liked: false,
 
+      channel: -10,
       song: undefined,
 
       currentSec: 0,
@@ -66,13 +69,21 @@ export class MainWindow extends React.Component<{}, MainWindowState> {
     while (!song) {
       song = await doubanApiClient.getDoubanSelectedSong(true);
     }
-    this.setState({ song: song });
+    this.setState({ song });
+  }
+
+  async playNextSong() {
+    let likedSongs: LikedSongs | null = null;
+    if (this.state.channel === 'liked') {
+      likedSongs = await doubanApiClient.getLikedSongs();
+    }
+
+    const { channel, song } = await getNextSong({ channel: this.state.channel, song: this.state.song }, likedSongs);
+    this.setState({ channel, song });
   }
 
   handleVideoOnTimeUpdate() {
     if (this.state.song && this.videoRef.current) {
-      console.log(this.videoRef.current.currentTime);
-
       this.setState({
         currentSec: this.videoRef.current.currentTime,
         totalSec: this.state.song.length,
@@ -80,22 +91,22 @@ export class MainWindow extends React.Component<{}, MainWindowState> {
     }
   }
 
-  handleVideoOnEnded() {
-    return;
+  async handleVideoOnEnded() {
+    await this.playNextSong();
   }
 
   handlePausePlayButtonOnClick() {
     this.setState({ paused: !this.state.paused });
 
     if (this.state.paused) {
-      this.videoRef.current?.pause();
-    } else {
       this.videoRef.current?.play();
+    } else {
+      this.videoRef.current?.pause();
     }
   }
 
-  handleNextButtonOnClick() {
-    return;
+  async handleNextButtonOnClick() {
+    await this.playNextSong();
   }
 
   handleLikeButtonOnClick() {
@@ -121,8 +132,8 @@ export class MainWindow extends React.Component<{}, MainWindowState> {
             autoPlay
             height="0px"
             src={this.state.song ? this.state.song.url : ''}
-            onEnded={this.handleVideoOnEnded}
             onTimeUpdate={this.handleVideoOnTimeUpdate}
+            onEnded={this.handleVideoOnEnded}
             ref={this.videoRef}
           ></video>
         </div>

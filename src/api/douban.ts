@@ -109,7 +109,7 @@ class Client {
     const liked: LikedSongs = await Axios.post('https://api.douban.com/v2/fm/redheart/basic', null, {
       headers: this.headers,
     }).then(res => {
-      if (res.status !== 200) {
+      if (res.status !== 200) { 
         return null;
       }
       return res.data;
