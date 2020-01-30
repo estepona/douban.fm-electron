@@ -3,7 +3,7 @@ import * as React from 'react';
 import style from '../../asset/style/style.css';
 
 interface SongArtistAlbumTextProps {
-  text: string;
+  text?: string;
 }
 
 interface SongArtistAlbumTextState {
@@ -45,7 +45,7 @@ export default class SongArtistAlbumText extends React.Component<SongArtistAlbum
         ].join(' ')}
         ref={this.textRef}
       >
-        {this.props.text}
+        {this.props.text ? this.props.text : ''}
       </p>
     );
   }

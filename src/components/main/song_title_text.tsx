@@ -3,7 +3,7 @@ import * as React from 'react';
 import style from '../../asset/style/style.css';
 
 interface SongTitleTextProps {
-  title: string;
+  title?: string;
 }
 
 interface SongTitleTextState {
@@ -40,7 +40,7 @@ export default class SongTitleText extends React.Component<SongTitleTextProps, S
         className={[style.baseText, style.marquee, this.state.textOverflow && style.marqueeAnimation].join(' ')}
         ref={this.textRef}
       >
-        {this.props.title}
+        {this.props.title ? this.props.title : ''}
       </p>
     );
   }

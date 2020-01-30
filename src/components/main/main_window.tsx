@@ -1,6 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import { getNextSong } from '../../ipc/main';
+import { doubanApiClient, githubApiClient } from '../../api';
+
 import PausePlayButton from './pause_play_button';
 import NextButton from './next_button';
 import LikeButton from './like_button';
@@ -8,7 +11,6 @@ import MoreButton from './more_button';
 import SongTitleText from './song_title_text';
 import SongArtistAlbumText from './song_artist_album_text';
 import SongTimeText from './song_time_text';
-import MiddleColumn from './middle_column';
 import style from '../../asset/style/style.css';
 
 export interface MainWindowState {
@@ -17,36 +19,79 @@ export interface MainWindowState {
   paused: boolean;
   liked: boolean;
 
-  title: string;
-  artistAlbum: string;
+  song?: Song;
 
   currentSec: number;
   totalSec: number;
 }
 
 export class MainWindow extends React.Component<{}, MainWindowState> {
+  private videoRef = React.createRef<HTMLVideoElement>();
+
   constructor(props: {}) {
     super(props);
     this.state = {
       loggedIn: true,
 
-      paused: true,
+      paused: false,
       liked: false,
 
-      title: 'It was then the axiomatic clothes met the straight refuse.',
-      artistAlbum: 'The momentous drop cannot bury the association.',
+      song: undefined,
 
       currentSec: 0,
       totalSec: 0,
     };
 
+    this.handleVideoOnTimeUpdate = this.handleVideoOnTimeUpdate.bind(this);
+    this.handleVideoOnEnded = this.handleVideoOnEnded.bind(this);
     this.handlePausePlayButtonOnClick = this.handlePausePlayButtonOnClick.bind(this);
     this.handleNextButtonOnClick = this.handleNextButtonOnClick.bind(this);
     this.handleLikeButtonOnClick = this.handleLikeButtonOnClick.bind(this);
   }
 
+  async componentDidMount() {
+    try {
+      await this.playDoubanSelectedSongOnStart();
+    } catch {
+      console.error();
+    }
+
+    if (this.videoRef.current) {
+      this.videoRef.current.volume = 0.5;
+    }
+  }
+
+  async playDoubanSelectedSongOnStart() {
+    let song: Song | null = null;
+    while (!song) {
+      song = await doubanApiClient.getDoubanSelectedSong(true);
+    }
+    this.setState({ song: song });
+  }
+
+  handleVideoOnTimeUpdate() {
+    if (this.state.song && this.videoRef.current) {
+      console.log(this.videoRef.current.currentTime);
+
+      this.setState({
+        currentSec: this.videoRef.current.currentTime,
+        totalSec: this.state.song.length,
+      });
+    }
+  }
+
+  handleVideoOnEnded() {
+    return;
+  }
+
   handlePausePlayButtonOnClick() {
     this.setState({ paused: !this.state.paused });
+
+    if (this.state.paused) {
+      this.videoRef.current?.pause();
+    } else {
+      this.videoRef.current?.play();
+    }
   }
 
   handleNextButtonOnClick() {
@@ -70,8 +115,16 @@ export class MainWindow extends React.Component<{}, MainWindowState> {
           <PausePlayButton paused={this.state.paused} pausePlayButtonOnClick={this.handlePausePlayButtonOnClick} />
         </div>
         <div className={`${style.middleCol} ${style.component}`}>
-          <SongTitleText title={this.state.title} />
-          <SongArtistAlbumText text={this.state.artistAlbum} />
+          <SongTitleText title={this.state.song && this.state.song.title} />
+          <SongArtistAlbumText text={this.state.song && `${this.state.song.artist}: ${this.state.song.albumtitle}`} />
+          <video
+            autoPlay
+            height="0px"
+            src={this.state.song ? this.state.song.url : ''}
+            onEnded={this.handleVideoOnEnded}
+            onTimeUpdate={this.handleVideoOnTimeUpdate}
+            ref={this.videoRef}
+          ></video>
         </div>
         <div className={`${style.component} ${style.rightCol}`}>
           <SongTimeText currentSec={this.state.currentSec} totalSec={this.state.totalSec} />
