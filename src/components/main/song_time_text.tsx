@@ -30,8 +30,6 @@ export default class SongTimeText extends React.Component<SongTimeTextProps, {}>
     const lenSec = String(Math.floor(this.props.totalSec % 60)).padStart(2, '0');
     const text = `${curMin}:${curSec} / ${lenMin}:${lenSec}`;
 
-    console.log(text);
-
     return <p className={`${style.rightColUp} ${style.baseText} ${style.baseTextSmallGrey}`}>{text}</p>;
   }
 }

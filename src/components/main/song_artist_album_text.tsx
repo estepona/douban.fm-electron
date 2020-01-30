@@ -6,42 +6,24 @@ interface SongArtistAlbumTextProps {
   text?: string;
 }
 
-interface SongArtistAlbumTextState {
-  textOverflow: boolean;
-}
-
-export default class SongArtistAlbumText extends React.Component<SongArtistAlbumTextProps, SongArtistAlbumTextState> {
+export default class SongArtistAlbumText extends React.Component<SongArtistAlbumTextProps, {}> {
   private textRef = React.createRef<HTMLParagraphElement>();
 
-  constructor(props: SongArtistAlbumTextProps) {
-    super(props);
-    this.state = {
-      textOverflow: false,
-    };
-  }
-
-  componentDidMount() {
+  render() {
+    let textOverflow = false;
     if (this.textRef.current) {
       if (this.textRef.current.scrollWidth > 155) {
-        this.setState({ textOverflow: true });
-      } else {
-        this.setState({ textOverflow: false });
+        textOverflow = true;
       }
     }
-  }
 
-  componentWillUnmount() {
-    this.setState({ textOverflow: false });
-  }
-
-  render() {
     return (
       <p
         className={[
           style.baseText,
           style.baseTextSmallGrey,
           style.marquee,
-          this.state.textOverflow && style.marqueeAnimation,
+          textOverflow && style.marqueeAnimation,
         ].join(' ')}
         ref={this.textRef}
       >
