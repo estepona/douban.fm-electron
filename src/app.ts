@@ -1,15 +1,40 @@
 import * as dotenv from 'dotenv';
-import { app, screen, BrowserWindow } from 'electron';
+import { app, ipcMain, screen, BrowserWindow, Event } from 'electron';
 
 import * as config from './config';
+import { doubanApiClient } from './api';
+import { readAuth } from './util/auth';
 
 dotenv.config();
+
+// TODO: put all channels as enum
+
+/**
+ * fn
+ */
+
+const loginToDouban = async (win: BrowserWindow) => {
+  let authInfo = readAuth();
+
+  if (authInfo) {
+    doubanApiClient.setAccessToken(authInfo.access_token);
+
+    const likedSongs = await doubanApiClient.getLikedSongs();
+    if (!likedSongs) {
+      win.webContents.send(config.ipcChannels.app.notLoggedIn);
+    } else {
+      win.webContents.send(config.ipcChannels.app.loggedIn);
+    }
+  }
+
+  await doubanApiClient.getAndSetCookie();
+};
 
 /**
  * window
  */
 
-const createMainWindow = () => {
+const createMainWindow = (): BrowserWindow => {
   const primaryResolution = screen.getPrimaryDisplay().workAreaSize;
 
   const win = new BrowserWindow({
@@ -41,6 +66,33 @@ const createMainWindow = () => {
   win.on('closed', () => {
     app.quit();
   });
+
+  return win;
 };
 
-app.on('ready', createMainWindow);
+/**
+ * ipc
+ */
+
+ipcMain.on('main:openOptionMenu', (event: Event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  // optionMenu.popup({
+  //   window: win,
+  // });
+});
+
+/**
+ * app
+ */
+
+const initApp = async () => {
+  const win = createMainWindow();
+
+  try {
+    await loginToDouban(win);
+  } catch {
+    console.log('failed to login');
+  }
+};
+
+app.on('ready', initApp);
