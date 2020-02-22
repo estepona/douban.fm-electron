@@ -5,9 +5,9 @@ import style from '../../asset/style/style.css';
 interface PausePlayButtonProps {
   paused: boolean;
   src: string;
-  pausePlayButtonOnClick(e: React.MouseEvent): void;
-  pausePlayButtonOnMouseOver(e: React.MouseEvent): void;
-  pausePlayButtonOnMouseOut(e: React.MouseEvent): void;
+  onClick(e: React.MouseEvent): void;
+  onMouseOver(e: React.MouseEvent): void;
+  onMouseOut(e: React.MouseEvent): void;
 }
 
 export default class PausePlayButton extends React.Component<PausePlayButtonProps, {}> {
@@ -16,9 +16,9 @@ export default class PausePlayButton extends React.Component<PausePlayButtonProp
       <img
         className={style.pausePlayButton}
         src={this.props.src}
-        onMouseOver={this.props.pausePlayButtonOnMouseOver}
-        onMouseOut={this.props.pausePlayButtonOnMouseOut}
-        onClick={this.props.pausePlayButtonOnClick}
+        onMouseOver={this.props.onMouseOver}
+        onMouseOut={this.props.onMouseOut}
+        onClick={this.props.onClick}
       />
     );
   }

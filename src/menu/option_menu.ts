@@ -58,57 +58,59 @@ export const createDoubanSelectedMenu = async (mainWindow: BrowserWindow, option
   const doubanSelectedMenu = Menu.buildFromTemplate(template);
 
   doubanSelectedMenu.items.forEach(aggCh => {
-    aggCh.submenu.items.forEach((ch, chIdx) => {
-      ch.click = async () => {
-        // check this channel
-        ch.checked = true;
+    aggCh.submenu &&
+      aggCh.submenu.items.forEach((ch, chIdx) => {
+        ch.click = async () => {
+          // check this channel
+          ch.checked = true;
 
-        // un-check all other rec channels
-        doubanSelectedMenu.items.forEach(aggChCopy => {
-          aggChCopy.submenu.items.forEach(chCopy => {
-            if (chCopy !== ch) {
-              chCopy.checked = false;
-            }
+          // un-check all other rec channels
+          doubanSelectedMenu.items.forEach(aggChCopy => {
+            aggChCopy.submenu &&
+              aggChCopy.submenu.items.forEach(chCopy => {
+                if (chCopy !== ch) {
+                  chCopy.checked = false;
+                }
+              });
           });
-        });
 
-        // un-check other channels in optionMenu
-        // 我的 -> 红心
-        optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
-        // 我的 -> 兆赫 -> 豆瓣精选
-        optionMenu.items[OptionMenuItems.Me].submenu.items[0].checked = false;
+          // un-check other channels in optionMenu
+          // 我的 -> 红心
+          optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+          // 我的 -> 兆赫 -> 豆瓣精选
+          optionMenu.items[OptionMenuItems.Me].submenu.items[0].checked = false;
 
-        // send song via ipc
-        let channel: number | null = null;
+          // send song via ipc
+          let channel: number | null = null;
 
-        switch (aggCh.label) {
-          case locale.recChannels.artist.zh:
-            channel = recChannels.data.channels.artist[chIdx].id;
-            break;
-          case locale.recChannels.track.zh:
-            channel = recChannels.data.channels.track[chIdx].id;
-            break;
-          case locale.recChannels.scenario.zh:
-            channel = recChannels.data.channels.scenario[chIdx].id;
-            break;
-          case locale.recChannels.language.zh:
-            channel = recChannels.data.channels.language[chIdx].id;
-            break;
-          case locale.recChannels.genre.zh:
-            channel = recChannels.data.channels.genre[chIdx].id;
-            break;
-          default:
-            break;
-        }
+          switch (aggCh.label) {
+            case locale.recChannels.artist.zh:
+              channel = recChannels.data.channels.artist[chIdx].id;
+              break;
+            case locale.recChannels.track.zh:
+              channel = recChannels.data.channels.track[chIdx].id;
+              break;
+            case locale.recChannels.scenario.zh:
+              channel = recChannels.data.channels.scenario[chIdx].id;
+              break;
+            case locale.recChannels.language.zh:
+              channel = recChannels.data.channels.language[chIdx].id;
+              break;
+            case locale.recChannels.genre.zh:
+              channel = recChannels.data.channels.genre[chIdx].id;
+              break;
+            default:
+              break;
+          }
 
-        if (channel) {
-          const playerState = await getNextSong({
-            channel,
-          });
-          mainWindow.webContents.send('main:receiveNextSong', playerState);
-        }
-      };
-    });
+          if (channel) {
+            const playerState = await getNextSong({
+              channel,
+            });
+            mainWindow.webContents.send('main:receiveNextSong', playerState);
+          }
+        };
+      });
   });
 
   return doubanSelectedMenu;

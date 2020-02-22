@@ -186,9 +186,9 @@ export class MainWindow extends React.Component<{}, MainWindowState> {
           <PausePlayButton
             paused={this.state.paused}
             src={this.state.pausePlayButtonSrc}
-            pausePlayButtonOnClick={this.handlePausePlayButtonOnClick}
-            pausePlayButtonOnMouseOver={this.handlePausePlayButtonOnMouseOver}
-            pausePlayButtonOnMouseOut={this.handlePausePlayButtonOnMouseOut}
+            onClick={this.handlePausePlayButtonOnClick}
+            onMouseOver={this.handlePausePlayButtonOnMouseOver}
+            onMouseOut={this.handlePausePlayButtonOnMouseOut}
           />
         </div>
         <div className={`${style.middleCol} ${style.component}`}>
