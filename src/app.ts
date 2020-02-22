@@ -14,7 +14,7 @@ dotenv.config();
  */
 
 const loginToDouban = async (win: BrowserWindow) => {
-  let authInfo = readAuth();
+  const authInfo = readAuth();
 
   if (authInfo) {
     doubanApiClient.setAccessToken(authInfo.access_token);
@@ -74,12 +74,12 @@ const createMainWindow = (): BrowserWindow => {
  * ipc
  */
 
-ipcMain.on('main:openOptionMenu', (event: Event) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  // optionMenu.popup({
-  //   window: win,
-  // });
-});
+// ipcMain.on('main:openOptionMenu', (event: Event) => {
+//   const win = BrowserWindow.fromWebContents(event.sender);
+//   optionMenu.popup({
+//     window: win,
+//   });
+// });
 
 /**
  * app

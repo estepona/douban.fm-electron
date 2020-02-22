@@ -26,7 +26,7 @@ const loginHtmlPath = path.join(__dirname, '..', 'src', 'window', 'login', 'logi
 const checkUpdateHtmlPath = path.join(__dirname, '..', 'src', 'window', 'check_update', 'check_update.html');
 
 export let likedSongs: LikedSongs | null = null;
-export let recChannels: RecChannels | null = null;
+export const recChannels: RecChannels | null = null;
 
 const createMainWindow = async () => {
   if (authInfo) {
@@ -210,15 +210,15 @@ optionMenu.append(
                 mainWindow.webContents.send('main:receiveNextSong', playerState);
 
                 // 我的 -> 红心 -> 顺序
-                optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[0].checked = true;
+                // optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[0].checked = true;
                 // 我的 -> 红心 -> 随机
-                optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[1].checked = false;
+                // optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[1].checked = false;
                 // 我的 -> 兆赫 -> 豆瓣精选
-                optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = false;
+                // optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = false;
                 // 我的 -> 兆赫 -> 豆瓣推荐
-                optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
-                  aggCh.submenu.items.forEach(ch => (ch.checked = false));
-                });
+                // optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
+                // aggCh.submenu.items.forEach(ch => (ch.checked = false));
+                // });
               }
             },
           },
@@ -246,15 +246,15 @@ optionMenu.append(
                 mainWindow.webContents.send('main:receiveNextSong', playerState);
 
                 // 我的 -> 红心 -> 顺序
-                optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[0].checked = false;
+                // optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[0].checked = false;
                 // 我的 -> 红心 -> 随机
-                optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[1].checked = true;
+                // optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items[1].checked = true;
                 // 我的 -> 兆赫 -> 豆瓣精选
-                optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = false;
+                // optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = false;
                 // 我的 -> 兆赫 -> 豆瓣推荐
-                optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
-                  aggCh.submenu.items.forEach(ch => (ch.checked = false));
-                });
+                // optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
+                //   aggCh.submenu.items.forEach(ch => (ch.checked = false));
+                // });
               }
             },
           },
@@ -279,13 +279,13 @@ optionMenu.append(
             });
 
             // 我的 -> 红心
-            optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+            // optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
             // 我的 -> 兆赫 -> 豆瓣精选
-            optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = true;
+            // optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = true;
             // 我的 -> 兆赫 -> 豆瓣推荐
-            optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
-              aggCh.submenu.items.forEach(ch => (ch.checked = false));
-            });
+            // optionMenu.items[OptionMenuItems.FMs].submenu.items[1].submenu.items.forEach(aggCh => {
+            //   aggCh.submenu.items.forEach(ch => (ch.checked = false));
+            // });
           }
         },
       },
@@ -320,9 +320,9 @@ optionMenu.append(
         mainWindow.webContents.send('main:receiveNextSong', playerState);
 
         // 我的 -> 红心
-        optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+        // optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
         // 我的 -> 兆赫 -> 豆瓣精选
-        optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = true;
+        // optionMenu.items[OptionMenuItems.FMs].submenu.items[0].checked = true;
 
         // refresh DoubanSelected
         await buildDoubanSelectedMenu(mainWindow, optionMenu);
@@ -350,7 +350,7 @@ optionMenu.append(
       checkUpdateWindow && checkUpdateWindow.show();
 
       const res = await githubApiClient.getReleases();
-      let msg = ['检查更新失败'];
+      const msg = ['检查更新失败'];
 
       if (res.length) {
         if (res[0].tag_name !== config.general.appVersion) {
@@ -400,13 +400,13 @@ ipcMain.on('login:login', async (event: Event, vals: string[]) => {
     optionMenu.items[OptionMenuItems.Logout].enabled = true;
     optionMenu.items[OptionMenuItems.Me].enabled = true;
 
-    event.sender.send('login:success');
+    mainWindow && mainWindow.webContents.send('login:success');
 
     if (mainWindow) {
       await buildDoubanSelectedMenu(mainWindow, optionMenu);
     }
   } catch (error) {
-    event.sender.send('login:fail', error.message);
+    mainWindow && mainWindow.webContents.send('login:fail', error.message);
   }
 });
 
@@ -417,12 +417,12 @@ ipcMain.on('login:close', () => {
   }
 });
 
-ipcMain.on('main:openOptionMenu', (event: Event) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  optionMenu.popup({
-    window: win,
-  });
-});
+// ipcMain.on('main:openOptionMenu', (event: Event) => {
+//   const win = BrowserWindow.fromWebContents(event.sender);
+//   optionMenu.popup({
+//     window: win,
+//   });
+// });
 
 ipcMain.on('main:refresh', async (event: Event) => {
   await optionMenu.items[OptionMenuItems.Refresh].click();
@@ -447,7 +447,8 @@ ipcMain.on('main:getNextSong', async (event: Event, val: PlayerState | null) => 
 
   const playerState = await getNextSong(val, likedSongs);
 
-  event.sender.send('main:receiveNextSong', playerState);
+  // event.sender.send('main:receiveNextSong', playerState);
+  mainWindow && mainWindow.webContents.send('main:receiveNextSong', playerState);
 });
 
 ipcMain.on('main:likeSong', async (event: Event, val: PlayerState | null) => {

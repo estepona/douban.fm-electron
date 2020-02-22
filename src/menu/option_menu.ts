@@ -76,9 +76,9 @@ export const createDoubanSelectedMenu = async (mainWindow: BrowserWindow, option
 
           // un-check other channels in optionMenu
           // 我的 -> 红心
-          optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
+          // optionMenu.items[OptionMenuItems.Me].submenu.items[1].submenu.items.forEach(m => (m.checked = false));
           // 我的 -> 兆赫 -> 豆瓣精选
-          optionMenu.items[OptionMenuItems.Me].submenu.items[0].checked = false;
+          // optionMenu.items[OptionMenuItems.Me].submenu.items[0].checked = false;
 
           // send song via ipc
           let channel: number | null = null;
@@ -119,17 +119,17 @@ export const createDoubanSelectedMenu = async (mainWindow: BrowserWindow, option
 export const buildDoubanSelectedMenu = async (mainWindow: BrowserWindow, optionMenu: Menu) => {
   const doubanSelectedMenu = await createDoubanSelectedMenu(mainWindow, optionMenu);
 
-  if (optionMenu.items[OptionMenuItems.FMs].submenu.items.length === 1) {
-    optionMenu.items[OptionMenuItems.FMs].submenu.append(
-      new MenuItem({
-        label: '豆瓣推荐',
-        submenu: doubanSelectedMenu,
-      }),
-    );
-  } else if (optionMenu.items[OptionMenuItems.FMs].submenu.items.length === 2) {
-    optionMenu.items[OptionMenuItems.FMs].submenu.items[1] = new MenuItem({
-      label: '豆瓣推荐',
-      submenu: doubanSelectedMenu,
-    });
-  }
+  // if (optionMenu.items[OptionMenuItems.FMs].submenu.items.length === 1) {
+  //   optionMenu.items[OptionMenuItems.FMs].submenu.append(
+  //     new MenuItem({
+  //       label: '豆瓣推荐',
+  //       submenu: doubanSelectedMenu,
+  //     }),
+  //   );
+  // } else if (optionMenu.items[OptionMenuItems.FMs].submenu.items.length === 2) {
+  //   optionMenu.items[OptionMenuItems.FMs].submenu.items[1] = new MenuItem({
+  //     label: '豆瓣推荐',
+  //     submenu: doubanSelectedMenu,
+  //   });
+  // }
 };
