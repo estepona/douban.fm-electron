@@ -7,7 +7,7 @@
 </div>
 
 <center>
-  <img src="./src/asset/img/example.png" width=60% height=60%></img>
+  <img src="./src/asset/img/example.png"></img>
 </center>
 
 **中文** | [EN](./README.en.md)
