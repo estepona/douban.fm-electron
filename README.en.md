@@ -1,5 +1,5 @@
 <div align=center>
-  <h1>douban.fm-desktop</h1>
+  <h1>douban.fm Desktop</h1>
   <p>A tiny, elegant <a src="https://douban.fm/">douban.fm</a> desktop client built with electron.js</p>
   <img src="https://img.shields.io/badge/electron-5.0.12-blue"/>
   <img src="https://img.shields.io/badge/typescript-3.7.2-blueviolet"/>
