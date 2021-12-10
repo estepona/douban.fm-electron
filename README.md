@@ -1,5 +1,5 @@
 <div align=center>
-  <h1>douban.fm-desktop</h1>
+  <h1>豆瓣电台桌面版</h1>
   <p>一个极简版 <a src="https://douban.fm/">douban.fm</a> 桌面客户端，基于 electron.js</p>
   <img src="https://img.shields.io/badge/electron-5.0.12-blue"/>
   <img src="https://img.shields.io/badge/typescript-3.7.2-blueviolet"/>
