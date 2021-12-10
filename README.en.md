@@ -6,9 +6,9 @@
   <img src="https://img.shields.io/badge/downloaded-25-brightgreen"/>
 </div>
 
-<center>
-  <img src="./src/asset/img/example.png"></img>
-</center>
+<p align="center">
+  <img src="./src/asset/img/example.png" width=60% height=60%></img>
+</p>
 
 [中文](./README.md) | **EN**
 
