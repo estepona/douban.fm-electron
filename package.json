@@ -35,7 +35,7 @@
     "url": "https://github.com/estepona/douban.fm-electron/issues"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "dotenv": "^8.2.0",
     "lodash": "^4.17.21",
     "mousetrap": "^1.6.3"
